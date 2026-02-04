@@ -1,3 +1,6 @@
 import './styles/style.css';
 
-createRouter( "#app" );
+import { renderRoute } from "./router.js";
+
+renderRoute();
+window.addEventListener("hashchange", renderRoute);
