@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  min-height: 100vh;
 }
 
 body {
@@ -70,13 +70,18 @@ body {
 
 #main {
   flex: 1;
-  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 2rem 0rem;
 }
 
 .layout {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0;
+  min-height: 100%;     
 }
 
 .hero, .about, .browse {
@@ -100,7 +105,7 @@ body {
   width: 260px;
   height: 340px;
   border: 2px solid #000;
-  border-radius: 12px;
+  border-radius: 20px;
   background: #ddd;
 }
 
