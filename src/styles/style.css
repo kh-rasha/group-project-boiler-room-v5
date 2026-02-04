@@ -109,6 +109,25 @@ body {
   background: #ddd;
 }
 
+.about {
+  display: flex;
+  flex-direction: column;   
+}
+
+.browse {
+  display: flex;
+  flex-direction: column;  
+}
+
+.browse .browse-btn:first-of-type {
+  margin-top: auto;
+}
+
+.browse .browse-btn:last-of-type {
+  margin-bottom: auto;
+}
+
+
 .browse-btn {
   display: block;
   padding: .75rem;
