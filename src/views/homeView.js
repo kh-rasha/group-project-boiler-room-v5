@@ -3,18 +3,159 @@ export function renderHome(appEl) {
     <section class="layout">
 
       <section class="hero" aria-labelledby="hero-title">
-        <h1 id="hero-title">Live the Unwritten</h1>
+        <h1 id="hero-title">Placeholder Title</h1>
 
         <div class="hero-content">
           <div class="hero-text">
-            <p>Welcome to the Wizarding World of Harry Potter!</p>
-            <p>Browse characters, spells, locations and beasts.</p>
+            <p>
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext            
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+            Placeholder välkomsttext
+
+
+            </p>
           </div>
 
           <div class="hero-image placeholder" role="img" aria-label="Hogwarts image placeholder"></div>
         </div>
       </section>
 
+      <div class="side">
       <aside class="about" aria-labelledby="about-title">
         <h2 id="about-title">About us</h2>
         <p>
@@ -29,6 +170,7 @@ export function renderHome(appEl) {
         <a class="browse-btn" href="#/spells">Spells</a>
         <a class="browse-btn" href="#/beasts">Beasts</a>
       </nav>
+      </div>
 
     </section>
   `;
