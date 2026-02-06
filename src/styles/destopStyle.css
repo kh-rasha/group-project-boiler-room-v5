@@ -89,7 +89,21 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0;
-  min-height: 100%;     
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "hero"
+    "side";
+  gap: 1.5rem;   
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: static;   
+  top: auto;
 }
 
 .hero, .about, .browse {
@@ -110,7 +124,6 @@ body {
 }
 
 .hero-text {
-  max-width: 520px;
   flex: 1 1 320px;
 }
 
@@ -161,40 +174,4 @@ body {
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.12);
   transform: translateY(-1px);
-}
-
-@media (min-width: 900px) {
-  .layout {
-    display: grid;
-    grid-template-columns: 3fr 1.2fr;
-    grid-template-areas: "hero side";
-    gap: 2rem;
-    align-items: start;
-  }
-
-  .hero {
-    grid-area: hero;
-  }
-
-  .side {
-    grid-area: side;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    position: sticky;
-    top: 2rem;        
-    align-self: start;
-  }
-
-  .about,
-  .browse {
-    position: static;
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --gutter: 1rem;
-  }
 }
