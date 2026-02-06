@@ -1,4 +1,6 @@
-import './styles/style.css';
+import './styles/desktopStyle.css';
+import './styles/mobileStyle.css';
+
 
 import { renderRoute } from "./router.js";
 
