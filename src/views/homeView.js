@@ -124,36 +124,12 @@ export function renderHome(appEl) {
             Placeholder välkomsttext
             Placeholder välkomsttext
             Placeholder välkomsttext            
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext            
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-            Placeholder välkomsttext
-
-
             </p>
           </div>
-
-          <div class="hero-image placeholder" role="img" aria-label="Hogwarts image placeholder"></div>
         </div>
       </section>
+
+      
 
       <div class="side">
       <aside class="about" aria-labelledby="about-title">
