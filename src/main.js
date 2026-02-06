@@ -1,4 +1,4 @@
-import './styles/destopStyle.css';
+import './styles/desktopStyle.css';
 import './styles/mobileStyle.css';
 
 
