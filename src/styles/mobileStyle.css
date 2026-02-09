@@ -17,11 +17,19 @@
     align-self: start;
   }
 
+
   .about,
   .browse {
     position: static;
   }
 }
+
+@media (min-width: 700px) {
+  .poster-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 
 @media (max-width: 700px) {
   /* Länkar döljs på mobil tills menyn öppnas */
