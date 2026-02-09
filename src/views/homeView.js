@@ -1,3 +1,6 @@
+
+import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favoritesUI.js";
+
 export function renderHome(appEl) {
   // Placeholder-data nu, koppla till API senare
   const characters = [
@@ -48,21 +51,37 @@ export function renderHome(appEl) {
           </div>
 
           <div class="character-grid poster-grid">
-            ${characters.map(c => `
-              <a class="poster-card" href="#/character?id=${encodeURIComponent(c.id)}">
-                <div class="poster-frame">
-                  <img
-                    class="poster-img"
-                    src="${c.img || "https://via.placeholder.com/400x500?text=Character"}"
-                    alt="${escapeHtml(c.name)}"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 class="poster-title">${escapeHtml(c.name)}</h3>
-              </a>
-            `).join("")}
+            ${characters.map((c) => `
+  <a class="poster-card" href="#/character?id=${encodeURIComponent(c.id)}">
+    <div class="poster-frame">
+      <img
+        class="poster-img"
+        src="${c.img || 'https://via.placeholder.com/400x500?text=Character'}"
+        alt="${escapeHtml(c.name)}"
+        loading="lazy"
+      />
+    </div>
+
+    <h3 class="poster-title">${escapeHtml(c.name)}</h3>
+
+    <!-- ⭐ Favorite button -->
+    <button
+      type="button"
+      class="fav-btn"
+      data-fav-btn
+      data-id="${c.id}"
+      data-name="${escapeHtml(c.name)}"
+      aria-pressed="false"
+      aria-label="Add to favorites"
+    >☆</button>
+
+  </a>
+`).join("")}
+
           </div>
         </section>
+     
+}
       </div>
 
       <div class="side">
@@ -82,6 +101,11 @@ export function renderHome(appEl) {
 
     </section>
   `;
+  const grid = appEl.querySelector(".poster-grid");
+
+  setupFavoritesUI(grid);
+  syncFavoritesUI(grid);
+
 }
 
 function escapeHtml(s) {

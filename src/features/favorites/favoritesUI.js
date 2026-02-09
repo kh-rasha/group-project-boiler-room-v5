@@ -1,4 +1,5 @@
 
+// src/features/favorites/favoritesUI.js
 import { isFavorite, toggleFavorite } from "../../storage/favoritesStorage.js";
 
 /**
@@ -9,21 +10,24 @@ import { isFavorite, toggleFavorite } from "../../storage/favoritesStorage.js";
 export function setupFavoritesUI(containerEl) {
     if (!containerEl) return;
 
-    // Event delegation: listen for clicks on any favorite button
     containerEl.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-fav-btn]");
         if (!btn) return;
 
+        // IMPORTANT: prevent the click from triggering the card link
+        e.preventDefault();
+        e.stopPropagation();
+
         const id = btn.dataset.id;
         const name = btn.dataset.name;
 
-        // Toggle favorite state in storage
-        toggleFavorite({ id, name });
+        if (!id) return;
 
-        // Update button UI after toggling
+        toggleFavorite({ id, name });
         updateFavButton(btn, isFavorite(id));
     });
 }
+
 
 /**
  * Synchronizes favorite buttons with stored favorites.
