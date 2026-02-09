@@ -57,7 +57,7 @@ body {
 .main-col {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* mellan hero och characters-card */
+  gap: var(--gutter)
 }
 
 .layout {
