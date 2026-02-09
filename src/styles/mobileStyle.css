@@ -17,15 +17,37 @@
     align-self: start;
   }
 
+
   .about,
   .browse {
     position: static;
   }
 }
 
-  @media (max-width: 700px) {
+@media (min-width: 700px) {
+  .poster-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+@media (max-width: 700px) {
+  /* Länkar döljs på mobil tills menyn öppnas */
   .nav-links {
     display: none;
+    flex-direction: column;
+    gap: .75rem;
+    margin-left: 0;
+    padding-top: .75rem;
+  }
+
+  .top-nav.is-open .nav-links {
+    display: flex;
+  }
+
+  /* Knappen ska alltid synas */
+  .menu-btn {
+    display: inline-flex;
   }
 
   .hero-content {
@@ -38,10 +60,10 @@
     max-width: 320px;
     height: 220px;
   }
-}
 
-@media (max-width: 480px) {
-  :root {
-    --gutter: 1rem;
+  .section-title {
+    font-size: 1.5rem;
+    letter-spacing: 0.14em;
   }
 }
+
