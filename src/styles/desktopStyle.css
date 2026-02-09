@@ -187,6 +187,9 @@ body {
   flex-direction: column;
   text-align: center;   
 }
+#about-text {
+  color: #000;
+}
 
 .browse {
   display: flex;

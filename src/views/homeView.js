@@ -66,9 +66,7 @@ export function renderHome(appEl) {
       <div class="side">
         <aside class="about" aria-labelledby="about-title">
           <h2 id="about-title">About us</h2>
-          <div class="hero-text">
-          <p>Wizardpedia is a fan-made wiki for exploring the wizarding world.</p>
-          </div>
+          <p id="about-text">Wizardpedia is a fan-made wiki for exploring the wizarding world.</p>
         </aside>
 
         <nav class="browse" aria-label="Browse categories">
