@@ -1,3 +1,4 @@
+// src/storage/favoritesStorage.js
 
 const STORAGE_KEY = "wizardpedia:favorites:v1";
 
@@ -26,6 +27,7 @@ export function isFavorite(id) {
 export function addFavorite(character) {
     const favorites = getFavorites();
     if (favorites.some((f) => f.id === character.id)) return favorites;
+
     const next = [character, ...favorites];
     saveFavorites(next);
     return next;
