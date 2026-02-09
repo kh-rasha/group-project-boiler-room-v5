@@ -1,3 +1,5 @@
+import { renderCharacters } from "./views/charactersView.js";
+
 import { renderHome } from "./views/homeView.js";
 
 export function renderRoute() {
@@ -13,6 +15,11 @@ export function renderRoute() {
     renderHome(app);
     return;
   }
+  if (hash.startsWith("#/characters")) {
+    renderCharacters(app);
+    return;
+  }
+
 
   // placeholders tills ni bygger vidare
   app.innerHTML = `
