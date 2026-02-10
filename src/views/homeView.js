@@ -2,12 +2,12 @@ import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favorit
 
 export function renderHome(appEl) {
   const characters = [
-    { id: "harry", name: "Harry Potter", subtitle: "Gryffindor" },
-    { id: "hermione", name: "Hermione Granger", subtitle: "Gryffindor" },
-    { id: "ron", name: "Ron Weasley", subtitle: "Gryffindor" },
-    { id: "snape", name: "Severus Snape", subtitle: "Slytherin" },
-    { id: "dumbledore", name: "Albus Dumbledore", subtitle: "Headmaster" },
-    { id: "malfoy", name: "Draco Malfoy", subtitle: "Slytherin" },
+    { id: "harry", name: "Harry Potter" },
+    { id: "hermione", name: "Hermione Granger" },
+    { id: "ron", name: "Ron Weasley" },
+    { id: "snape", name: "Severus Snape" },
+    { id: "dumbledore", name: "Albus Dumbledore" },
+    { id: "malfoy", name: "Draco Malfoy" },
   ];
 
   const books = [
@@ -32,8 +32,8 @@ export function renderHome(appEl) {
     { id: "trailer", name: "Official Trailer" },
     { id: "bts", name: "Behind the Scenes" },
     { id: "interview", name: "Cast Interview" },
-    { id: "hogwarts", name: "Hogwarts Tour" },
     { id: "music", name: "Soundtrack Feature" },
+    { id: "hogwarts", name: "Hogwarts Tour" },
     { id: "magic", name: "Magic Moments" },
   ];
 
@@ -68,144 +68,30 @@ export function renderHome(appEl) {
           </div>
         </section>
 
-        <!-- CHARACTERS (med favorites) -->
-        <section class="content-card characters" aria-labelledby="characters-title">
-          <div class="section-head">
-            <h2 id="characters-title" class="section-title">Characters</h2>
-            <a class="section-link" href="#/characters">View all</a>
-          </div>
+        <!-- CONTENT CARDS -->
+        ${renderPosterSection({
+          title: "Characters",
+          route: "characters",
+          items: characters.slice(0, 6),
+        })}
 
-          <!-- ✅ Denna behåller .poster-grid så favoritesUI kan hitta knapparna -->
-          <div class="poster-grid poster-grid--characters">
-            ${characters.slice(0, 6).map((c) => `
-              <a class="poster-card" href="#/character?id=${encodeURIComponent(c.id)}">
-                <div class="poster-frame">
-                  <img
-                    class="poster-img"
-                    src="${c.img || "https://via.placeholder.com/400x500?text=Character"}"
-                    alt="${escapeHtml(c.name)}"
-                    loading="lazy"
-                  />
-                </div>
+        ${renderPosterSection({
+          title: "Books",
+          route: "books",
+          items: books.slice(0, 6),
+        })}
 
-                <h3 class="poster-title">${escapeHtml(c.name)}</h3>
+        ${renderPosterSection({
+          title: "Movies",
+          route: "movies",
+          items: movies.slice(0, 6),
+        })}
 
-                <button
-                  type="button"
-                  class="fav-btn"
-                  data-fav-btn
-                  data-id="${escapeHtml(c.id)}"
-                  data-name="${escapeHtml(c.name)}"
-                  aria-pressed="false"
-                  aria-label="Add to favorites"
-                >☆</button>
-              </a>
-            `).join("")}
-          </div>
-        </section>
-
-        <!-- BOOKS -->
-        <section class="content-card books" aria-labelledby="books-title">
-          <div class="section-head">
-            <h2 id="books-title" class="section-title">Books</h2>
-            <a class="section-link" href="#/books">View all</a>
-          </div>
-
-          <div class="poster-grid">
-            ${books.slice(0, 6).map((b) => `
-              <a class="poster-card" href="#/books?id=${encodeURIComponent(b.id)}">
-                <div class="poster-frame">
-                  <img
-                    class="poster-img"
-                    src="${b.img || "https://via.placeholder.com/400x500?text=Book"}"
-                    alt="${escapeHtml(b.name)}"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 class="poster-title">${escapeHtml(b.name)}</h3>
-                
-                <button
-                type="button"
-                class="fav-btn"
-                data-fav-btn
-                data-id="${b.id}"
-                data-name="${escapeHtml(b.name)}"
-                data-type="book"
-                aria-pressed="false"
-                aria-label="Add to favorites"
-              >☆</button 
-              </a>
-            `).join("")}
-          </div>
-        </section>
-
-        <!-- MOVIES -->
-        <section class="content-card movies" aria-labelledby="movies-title">
-          <div class="section-head">
-            <h2 id="movies-title" class="section-title">Movies</h2>
-            <a class="section-link" href="#/movies">View all</a>
-          </div>
-
-          <div class="poster-grid">
-            ${movies.slice(0, 6).map((m) => `
-              <a class="poster-card" href="#/movies?id=${encodeURIComponent(m.id)}">
-                <div class="poster-frame">
-                  <img
-                    class="poster-img"
-                    src="${m.img || "https://via.placeholder.com/400x500?text=Movie"}"
-                    alt="${escapeHtml(m.name)}"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 class="poster-title">${escapeHtml(m.name)}</h3>
-                <button
-                type="button"
-                class="fav-btn"
-                data-fav-btn
-                data-id="${m.id}"
-                data-name="${escapeHtml(m.name)}"
-                data-type="book"
-                aria-pressed="false"
-                aria-label="Add to favorites"
-              >☆</button    
-              </a>
-            `).join("")}
-          </div>
-        </section>
-
-        <!-- VIDEOS -->
-        <section class="content-card videos" aria-labelledby="videos-title">
-          <div class="section-head">
-            <h2 id="videos-title" class="section-title">Videos</h2>
-            <a class="section-link" href="#/videos">View all</a>
-          </div>
-
-          <div class="poster-grid">
-            ${videos.slice(0, 6).map((v) => `
-              <a class="poster-card" href="#/videos?id=${encodeURIComponent(v.id)}">
-                <div class="poster-frame">
-                  <img
-                    class="poster-img"
-                    src="${v.img || "https://via.placeholder.com/400x500?text=Video"}"
-                    alt="${escapeHtml(v.name)}"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 class="poster-title">${escapeHtml(v.name)}</h3>
-                <button
-                type="button"
-                class="fav-btn"
-                data-fav-btn
-                data-id="${v.id}"
-                data-name="${escapeHtml(v.name)}"
-                data-type="book"
-                aria-pressed="false"
-                aria-label="Add to favorites"
-              >☆</button
-              </a>
-            `).join("")}
-          </div>
-        </section>
+        ${renderPosterSection({
+          title: "Videos",
+          route: "videos",
+          items: videos.slice(0, 6),
+        })}
       </div>
 
       <!-- SIDE -->
@@ -230,12 +116,56 @@ export function renderHome(appEl) {
     </section>
   `;
 
-const grids = appEl.querySelectorAll(".poster-grid");
+  // Favorites: initiera på alla grids på startsidan
+  appEl.querySelectorAll(".poster-grid").forEach((grid) => {
+    setupFavoritesUI(grid);
+    syncFavoritesUI(grid);
+  });
+}
 
-grids.forEach(grid => {
-  setupFavoritesUI(grid);
-  syncFavoritesUI(grid);
-});
+function renderPosterSection({ title, route, items }) {
+  const titleId = `${route}-title`;
+
+  return `
+    <section class="content-card" aria-labelledby="${titleId}">
+      <div class="section-head">
+        <h2 id="${titleId}" class="section-title">${escapeHtml(title)}</h2>
+        <a class="section-link" href="#/${route}">View all</a>
+      </div>
+
+      <div class="poster-grid">
+        ${items.map(item => `
+          <a class="poster-card"
+             href="#/${route}?id=${encodeURIComponent(item.id)}"
+             aria-label="Open ${escapeHtml(title)} item: ${escapeHtml(item.name)}">
+            <div class="poster-frame">
+              <img
+                class="poster-img"
+                src="${item.img || "https://via.placeholder.com/400x500?text=Item"}"
+                alt="${escapeHtml(item.name)}"
+                loading="lazy"
+              />
+            </div>
+
+            <h3 class="poster-title">${escapeHtml(item.name)}</h3>
+
+            <!-- ⭐ Favorite button för ALLA -->
+            <button
+              type="button"
+              class="fav-btn"
+              data-fav-btn
+              data-id="${escapeHtml(item.id)}"
+              data-name="${escapeHtml(item.name)}"
+              data-type="${escapeHtml(route)}"
+              aria-pressed="false"
+              aria-label="Add to favorites"
+            >☆</button>
+          </a>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
 
 function escapeHtml(s) {
   return String(s)
@@ -243,5 +173,4 @@ function escapeHtml(s) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
-}
 }
