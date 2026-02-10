@@ -26,14 +26,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0;
-  /* Harry Potter font and color */
-  font-family: 'Cinzel', serif;
-  font-weight: 500;
-  font-size: 1rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: black;
-  /*  */
 }
 
 .site-header,
@@ -82,7 +74,7 @@ body {
   gap: 1.5rem;   
 }
 
-.hero, .about, .browse, .content-card  {
+.hero, .about, .browse, .characters {
   /* Harry Potter font and color */
   font-family: 'Cinzel', serif;
   font-weight: 500;
@@ -92,7 +84,7 @@ body {
   color: #8a6f3d;
   /*  */
   border: none;
-  padding: var(--gutter);
+  padding: 1.75rem;
   background: #fff;
   border-radius: 20px;
   box-shadow:
@@ -108,9 +100,15 @@ body {
   flex-wrap: wrap;
 }
 
-.hero-text {
-  flex: 1 1 320px;
-  color: #000;
+/* Characters section */
+.characters {
+  border: none;
+  padding: 1.75rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .hero-characters {
@@ -118,8 +116,6 @@ body {
   padding-top: 1.75rem;
   border-top: 1px solid rgba(0,0,0,0.08);
 }
-
-/* Content cards section */
 
 .section-head {
   display: flex;
@@ -191,12 +187,17 @@ body {
   outline-offset: 4px;
 }
 
+.hero-text {
+  flex: 1 1 320px;
+  color: #000;
+}
+
 /* Side section */
 
 .side {
   display: flex;
   flex-direction: column;
-  gap: var(--gutter);
+  gap: 1.5rem;
   position: static;   
   top: auto;
 }
