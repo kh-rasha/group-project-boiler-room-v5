@@ -20,10 +20,11 @@ export function setupFavoritesUI(containerEl) {
 
         const id = btn.dataset.id;
         const name = btn.dataset.name;
+        const type = btn.dataset.type;
 
         if (!id) return;
 
-        toggleFavorite({ id, name });
+        toggleFavorite({ id, name, type });
         updateFavButton(btn, isFavorite(id));
     });
 }
