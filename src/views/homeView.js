@@ -46,23 +46,47 @@ export async function renderHome(appEl) {
   charactersRes,
   spellsRes,
   booksRes,
-  moviesRes
+  moviesRes,
+  gryffRes,
+  slythRes,
+  ravenRes,
+  huffRes
 ] = await Promise.all([
   fetch(`${HP_API}/characters`),
   fetch(`${HP_API}/spells`),
   fetch(`${POTTER_DB}/books`),
   fetch(`${POTTER_DB}/movies`),
+  fetch(`${HP_API}/characters/house/gryffindor`),
+  fetch(`${HP_API}/characters/house/slytherin`),
+  fetch(`${HP_API}/characters/house/ravenclaw`),
+  fetch(`${HP_API}/characters/house/hufflepuff`),
 ]);
 
     if (!charactersRes.ok) throw new Error("Failed characters");
     if (!spellsRes.ok) throw new Error("Failed spells");
     if (!booksRes.ok) throw new Error("Failed books");
     if (!moviesRes.ok) throw new Error("Failed movies");
+    if (!gryffRes.ok) throw new Error("Failed house gryffindor");
+    if (!slythRes.ok) throw new Error("Failed house slytherin");
+    if (!ravenRes.ok) throw new Error("Failed house ravenclaw");
+    if (!huffRes.ok) throw new Error("Failed house hufflepuff");
 
     const characters = await charactersRes.json();
     const spells = await spellsRes.json();
     const books = (await booksRes.json()).data;
     const movies = (await moviesRes.json()).data;
+    const [gryff, slyth, raven, huff] = await Promise.all([gryffRes.json(), slythRes.json(),ravenRes.json(),huffRes.json(),]);
+
+    const houses = [
+    { id: "gryffindor", name: "Gryffindor", count: gryff.length },
+    { id: "slytherin", name: "Slytherin", count: slyth.length },
+    { id: "ravenclaw", name: "Ravenclaw", count: raven.length },
+    { id: "hufflepuff", name: "Hufflepuff", count: huff.length },
+].map(h => ({
+    id: h.id,
+    name: `${h.name} (${h.count})`,
+    img: null, // lägg in lokala bilder senare om du vill
+}));
 
     appEl.innerHTML = `
       <section class="layout">
@@ -109,6 +133,12 @@ export async function renderHome(appEl) {
             })),
           })}
 
+          ${renderPosterSection({
+          title: "Houses",
+          route: "houses",
+          items: houses
+        })}
+
 
         </div>
 
@@ -124,7 +154,6 @@ export async function renderHome(appEl) {
             <a class="browse-btn" href="#/books">Books</a>
             <a class="browse-btn" href="#/movies">Movies</a>
             <a class="browse-btn" href="#/spells">Spells</a>
-            <a class="browse-btn" href="#/locations">Locations</a>
             <a class="browse-btn" href="#/houses">Houses</a>
           </nav>
         </div>
