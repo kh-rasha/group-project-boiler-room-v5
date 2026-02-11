@@ -12,8 +12,10 @@
   }
 
   .side {
+    grid-area: side;
+    min-width: 0;
     position: sticky;
-    top: 2rem;        
+    top: 2rem;
     align-self: start;
   }
 

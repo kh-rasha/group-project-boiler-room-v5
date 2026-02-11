@@ -1,23 +1,48 @@
-
 import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favoritesUI.js";
 
 export function renderHome(appEl) {
-  // Placeholder-data nu, koppla till API senare
   const characters = [
-    { id: "harry", name: "Harry Potter", subtitle: "Gryffindor" },
-    { id: "hermione", name: "Hermione Granger", subtitle: "Gryffindor" },
-    { id: "ron", name: "Ron Weasley", subtitle: "Gryffindor" },
-    { id: "snape", name: "Severus Snape", subtitle: "Slytherin" },
-    { id: "dumbledore", name: "Albus Dumbledore", subtitle: "Headmaster" },
-    { id: "malfoy", name: "Draco Malfoy", subtitle: "Slytherin" },
+    { id: "harry", name: "Harry Potter" },
+    { id: "hermione", name: "Hermione Granger" },
+    { id: "ron", name: "Ron Weasley" },
+    { id: "snape", name: "Severus Snape" },
+    { id: "dumbledore", name: "Albus Dumbledore" },
+    { id: "malfoy", name: "Draco Malfoy" },
+  ];
 
+  const books = [
+    { id: "ps", name: "Philosopher’s Stone" },
+    { id: "cos", name: "Chamber of Secrets" },
+    { id: "poa", name: "Prisoner of Azkaban" },
+    { id: "gof", name: "Goblet of Fire" },
+    { id: "oop", name: "Order of the Phoenix" },
+    { id: "hbp", name: "Half-Blood Prince" },
+  ];
+
+  const movies = [
+    { id: "m1", name: "Sorcerer’s Stone" },
+    { id: "m2", name: "Chamber of Secrets" },
+    { id: "m3", name: "Prisoner of Azkaban" },
+    { id: "m4", name: "Goblet of Fire" },
+    { id: "m5", name: "Order of the Phoenix" },
+    { id: "m6", name: "Half-Blood Prince" },
+  ];
+
+  const videos = [
+    { id: "trailer", name: "Official Trailer" },
+    { id: "bts", name: "Behind the Scenes" },
+    { id: "interview", name: "Cast Interview" },
+    { id: "music", name: "Soundtrack Feature" },
+    { id: "hogwarts", name: "Hogwarts Tour" },
+    { id: "magic", name: "Magic Moments" },
   ];
 
   appEl.innerHTML = `
     <section class="layout">
 
       <div class="main-col">
-        <section class="hero" aria-labelledby="hero-title">
+        <!-- HERO -->
+        <section class="hero content-card" aria-labelledby="hero-title">
           <h1 id="hero-title">Welcome to Wizardpedia</h1>
 
           <div class="hero-content">
@@ -43,56 +68,45 @@ export function renderHome(appEl) {
           </div>
         </section>
 
-        <!-- ✅ Characters i egen card UNDER hero -->
-        <section class="characters" aria-labelledby="characters-title">
-          <div class="section-head">
-            <h2 id="characters-title" class="section-title">Characters</h2>
-            <a class="section-link" href="#/characters">View all</a>
-          </div>
+        <!-- CONTENT CARDS -->
+        ${renderPosterSection({
+          title: "Characters",
+          route: "characters",
+          items: characters.slice(0, 6),
+        })}
 
-          <div class="character-grid poster-grid">
-            ${characters.map((c) => `
-  <a class="poster-card" href="#/character?id=${encodeURIComponent(c.id)}">
-    <div class="poster-frame">
-      <img
-        class="poster-img"
-        src="${c.img || 'https://via.placeholder.com/400x500?text=Character'}"
-        alt="${escapeHtml(c.name)}"
-        loading="lazy"
-      />
-    </div>
+        ${renderPosterSection({
+          title: "Books",
+          route: "books",
+          items: books.slice(0, 6),
+        })}
 
-    <h3 class="poster-title">${escapeHtml(c.name)}</h3>
+        ${renderPosterSection({
+          title: "Movies",
+          route: "movies",
+          items: movies.slice(0, 6),
+        })}
 
-    <!-- ⭐ Favorite button -->
-    <button
-      type="button"
-      class="fav-btn"
-      data-fav-btn
-      data-id="${c.id}"
-      data-name="${escapeHtml(c.name)}"
-      aria-pressed="false"
-      aria-label="Add to favorites"
-    >☆</button>
-
-  </a>
-`).join("")}
-
-          </div>
-        </section>
-     
-}
+        ${renderPosterSection({
+          title: "Videos",
+          route: "videos",
+          items: videos.slice(0, 6),
+        })}
       </div>
 
+      <!-- SIDE -->
       <div class="side">
-        <aside class="about" aria-labelledby="about-title">
+        <aside class="about content-card" aria-labelledby="about-title">
           <h2 id="about-title" class="section-title">About us</h2>
           <p id="about-text">Wizardpedia is a fan-made wiki for exploring the wizarding world.</p>
         </aside>
 
-        <nav class="browse" aria-label="Browse categories">
+        <nav class="browse content-card" aria-label="Browse categories">
           <h2 class="section-title">Browse</h2>
           <a class="browse-btn" href="#/characters">Characters</a>
+          <a class="browse-btn" href="#/books">Books</a>
+          <a class="browse-btn" href="#/movies">Movies</a>
+          <a class="browse-btn" href="#/videos">Videos</a>
           <a class="browse-btn" href="#/locations">Locations</a>
           <a class="browse-btn" href="#/spells">Spells</a>
           <a class="browse-btn" href="#/beasts">Beasts</a>
@@ -101,17 +115,62 @@ export function renderHome(appEl) {
 
     </section>
   `;
-  const grid = appEl.querySelector(".poster-grid");
 
-  setupFavoritesUI(grid);
-  syncFavoritesUI(grid);
+  // Favorites: initiera på alla grids på startsidan
+  appEl.querySelectorAll(".poster-grid").forEach((grid) => {
+    setupFavoritesUI(grid);
+    syncFavoritesUI(grid);
+  });
+}
 
+function renderPosterSection({ title, route, items }) {
+  const titleId = `${route}-title`;
+
+  return `
+    <section class="content-card" aria-labelledby="${titleId}">
+      <div class="section-head">
+        <h2 id="${titleId}" class="section-title">${escapeHtml(title)}</h2>
+        <a class="section-link" href="#/${route}">View all</a>
+      </div>
+
+      <div class="poster-grid">
+        ${items.map(item => `
+          <a class="poster-card"
+             href="#/${route}?id=${encodeURIComponent(item.id)}"
+             aria-label="Open ${escapeHtml(title)} item: ${escapeHtml(item.name)}">
+            <div class="poster-frame">
+              <img
+                class="poster-img"
+                src="${item.img || "https://via.placeholder.com/400x500?text=Item"}"
+                alt="${escapeHtml(item.name)}"
+                loading="lazy"
+              />
+            </div>
+
+            <h3 class="poster-title">${escapeHtml(item.name)}</h3>
+
+            <!-- ⭐ Favorite button för ALLA -->
+            <button
+              type="button"
+              class="fav-btn"
+              data-fav-btn
+              data-id="${escapeHtml(item.id)}"
+              data-name="${escapeHtml(item.name)}"
+              data-type="${escapeHtml(route)}"
+              aria-pressed="false"
+              aria-label="Add to favorites"
+            >☆</button>
+          </a>
+        `).join("")}
+      </div>
+    </section>
+  `;
 }
 
 function escapeHtml(s) {
   return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }

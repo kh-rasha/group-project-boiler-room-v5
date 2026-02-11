@@ -121,7 +121,7 @@ body {
   gap: 1.5rem;   
 }
 
-.hero, .about, .browse, .characters {
+.hero, .about, .browse, .content-card {
   /* Harry Potter font and color */
   font-family: 'Cinzel', serif;
   font-weight: 500;
