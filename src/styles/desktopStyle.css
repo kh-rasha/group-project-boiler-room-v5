@@ -269,12 +269,12 @@ body {
   display: block;
   padding: .75rem;
   margin-bottom: .75rem;
-  border: none;
+  border: 1px solid var(--hp-gold-soft);
   border-radius: 12px;
   text-align: center;
   text-decoration: none;
-  color: #000;
-  background: #b07a57;
+  color: var(--hp-parchment);
+  background: var(--hp-menu);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.08);
 }
