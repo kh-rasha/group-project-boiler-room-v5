@@ -1,4 +1,5 @@
 import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favoritesUI.js";
+import { HOUSE_IMAGES } from "../utils/houseImages.js";
 
 const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
@@ -85,7 +86,7 @@ export async function renderHome(appEl) {
 ].map(h => ({
     id: h.id,
     name: `${h.name} (${h.count})`,
-    img: null, // lägg in lokala bilder senare om du vill
+    img: HOUSE_IMAGES[h.id] || null,
 }));
 
     appEl.innerHTML = `
