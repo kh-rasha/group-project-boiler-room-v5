@@ -1,5 +1,29 @@
 :root {
   --gutter: 1.5rem;
+
+  /* Arcane blue – Hogwarts night */
+  --hp-ink: #141c33;       /* djup blå */
+  --hp-plum: #221f3f;      /* blå-lila */
+  --hp-slate: #2f3a66;     /* blå highlight */
+
+  --hp-gold: #c7a24a;
+  --hp-gold-soft: rgba(199,162,74,0.25);
+  --hp-parchment: #f4eddc;
+
+  /* Blue glow */
+  --hp-blue-glow: rgba(120, 155, 255, 0.18);
+
+  --hp-gradient: linear-gradient(
+    180deg,
+    var(--hp-ink),
+    var(--hp-plum)
+  );
+
+  --hp-menu: linear-gradient(
+    180deg,
+    rgba(20,28,51,0.96),
+    rgba(34,31,63,0.96)
+  );
 }
 
 /* Main section */
@@ -36,14 +60,37 @@ body {
 
 .site-header .container,
 .site-footer .container {
+  position: relative;   
+  overflow: visible;     
   max-width: 1200px;
   margin: 0 auto;
-  background: #b07a57;
-  border: none;
+  background: var(--hp-gradient);  
+  border: 1px solid var(--hp-gold-soft);
   border-radius: 20px;
+  color: var(--hp-parchment);
   padding: 1rem 1.5rem;
   box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.15);
+    0 8px 26px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 0 28px var(--hp-blue-glow);
+}
+
+.site-header .container::before,
+.site-footer .container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  clip-path: inset(0 round 20px);
+
+  background:
+    radial-gradient(
+      600px circle at 20% -10%,
+      rgba(120,155,255,0.25),
+      transparent 60%
+    );
 }
 
 #main {
@@ -256,6 +303,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 55%;
+  color: var(--hp-parchment);
 }
 /* Nav section */
 
@@ -274,13 +322,16 @@ body {
 }
 
 .nav-links a {
-  color: #000;
+  color: var(--hp-parchment);
   text-decoration: none;
+  padding: .5rem .75rem;
+  border-radius: 10px;
 }
 
 .menu-btn {
-  border: none;
-  background: transparent;
+  color: var(--hp-parchment);
+  border: 1px solid rgba(199,162,74,0.20);
+  background: rgba(255,255,255,0.04);
   border-radius: 6px;
   padding: .25rem .5rem;
   align-self: center;
@@ -295,11 +346,13 @@ body {
   outline: 3px solid #000;
   outline-offset: 3px;
   border-radius: 8px;
-  outline-color: #fff;
+   outline-color: rgba(199,162,74,0.9);
 }
 .menu-btn:hover,
 .nav-links a:hover {
   text-shadow: 0 0 6px rgba(255, 230, 150, 0.8);
+    background: rgba(199,162,74,0.10);
+  border-radius: 10px;
 }
 
 .menu-btn:focus-visible,
@@ -309,6 +362,7 @@ body {
     0 0 0 3px rgba(255, 215, 120, 0.9),
     0 0 12px rgba(255, 215, 120, 0.8),
     0 0 20px rgba(255, 215, 120, 0.6);
+      background: rgba(199,162,74,0.10);
   border-radius: 10px;
 }
 @keyframes magicPulse {
@@ -406,46 +460,82 @@ body {
 /* Dropdown hamburger menu */
 .top-nav { 
   position: relative; 
+  z-index: 5;
 }
 
 /* Gör nav-links till dropdown */
 .nav-links {
+  display: none;
   position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
+  top: calc(100% + 30px);
+  right: -25px;
   z-index: 50;
+  width: auto;
+  min-width: 150px;
+  left: auto;
 
-  display: flex;
   flex-direction: column;
-  gap: .75rem;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem;
+  border-radius: 20px;
 
-  margin-left: 0;
-  padding: .75rem 1rem;
-  border-radius: 14px;
 
-  background: #b07a57;
-  box-shadow: 0 10px 25px rgba(0,0,0,.15);
+  border: 1px solid var(--hp-gold-soft);
+  background: var(--hp-menu);
+  color: var(--hp-parchment);
 
-  /* gömd default */
+  box-shadow:
+    0 16px 36px rgba(0,0,0,.45),
+    0 0 24px var(--hp-blue-glow);
+
   opacity: 0;
   transform: translateY(-10px);
   visibility: hidden;
   pointer-events: none;
 
-  transition:
-    transform 280ms ease,
-    opacity 200ms ease,
-    visibility 0s linear 280ms;
+  transition: transform 280ms ease, opacity 200ms ease;
 }
+
+.top-nav.is-open .nav-links {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
 
 .top-nav.is-open .nav-links {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
   pointer-events: auto;
+  display: flex;
 
   transition:
     transform 280ms ease,
     opacity 200ms ease,
     visibility 0s;
+}
+.top-nav .nav-links a {
+  color: var(--hp-parchment);
+}
+
+/* Overlay behind the dropdown */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 12, 22, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 40; /* behind dropdown */
+}
+
+.menu-overlay.is-open {
+  display: block;
+}
+
+/* Make sure dropdown is above overlay */
+.nav-links {
+  z-index: 50;
 }
