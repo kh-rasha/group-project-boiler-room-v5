@@ -21,7 +21,6 @@ function initMenu() {
     setMenu(!topNav.classList.contains("is-open"));
   });
 
-  // ESC stänger om menyn är öppen
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && topNav.classList.contains("is-open")) {
       setMenu(false);
@@ -29,12 +28,10 @@ function initMenu() {
     }
   });
 
-  // Klick på länk stänger
   navLinks.querySelectorAll("a").forEach((a) => {
     a.addEventListener("click", () => setMenu(false));
   });
 
-  // Klick utanför stänger (bra för dropdown)
   document.addEventListener("click", (e) => {
     if (topNav.classList.contains("is-open") && !topNav.contains(e.target)) {
       setMenu(false);
@@ -42,7 +39,45 @@ function initMenu() {
   });
 }
 
-initMenu();
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("/sw.js");
+      console.log("Service worker registered");
+    } catch (err) {
+      console.warn("Service worker registration failed", err);
+    }
+  });
+}
 
-renderRoute();
-window.addEventListener("hashchange", renderRoute);
+/* ---------- Global Offline Banner ---------- */
+function updateOnlineStatus() {
+  let banner = document.getElementById("offline-banner");
+
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "offline-banner";
+    banner.setAttribute("role", "alert");
+    banner.setAttribute("aria-live", "polite");
+    document.body.prepend(banner);
+  }
+
+  if (!navigator.onLine) {
+    banner.textContent = "You are offline — some data may not be up to date.";
+    banner.hidden = false;
+  } else {
+    banner.hidden = true;
+  }
+}
+
+function boot() {
+  renderRoute();
+  initMenu(); // ✅ re-bind menu if DOM changed
+}
+
+boot();
+updateOnlineStatus();
+
+window.addEventListener("hashchange", boot);
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);

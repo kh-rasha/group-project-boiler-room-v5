@@ -524,3 +524,15 @@ body {
 .nav-links {
   z-index: 50;
 }
+
+#offline-banner {
+  display: none;
+  padding: .75rem 1rem;
+  background: var(--hp-menu);
+  color: var(--hp-parchment);
+  text-align: center;
+  font-size: .9rem;
+  border-bottom: 1px solid var(--hp-gold-soft);
+  position: relative;
+  z-index: 9999;
+}

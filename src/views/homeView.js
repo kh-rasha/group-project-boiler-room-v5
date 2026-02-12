@@ -4,6 +4,14 @@ import { HOUSE_IMAGES } from "../utils/houseImages.js";
 const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
 
+function getFriendlyMessage(type) {
+  if (type === "offline") {
+    return "You are offline — we can’t fetch new data right now. Favorites will still work.";
+  }
+  return "We couldn’t load the data right now. Please try again in a moment.";
+}
+
+
 export async function renderHome(appEl) {
   const heroHtml = `
     <section class="hero content-card" aria-labelledby="hero-title">
@@ -166,17 +174,46 @@ export async function renderHome(appEl) {
       setupFavoritesUI(grid);
       syncFavoritesUI(grid);
     });
-  } catch (err) {
-    appEl.innerHTML = `
-      <section class="layout">
-        <div class="main-col">
-          ${heroHtml}
-          <p role="alert">Failed to load magical data.</p>
-        </div>
-      </section>
-    `;
+} catch (err) {
+  console.error(err);
+
+  const isOffline = !navigator.onLine;
+
+  appEl.innerHTML = `
+    <section class="layout">
+      <div class="main-col">
+        ${heroHtml}
+        <p role="alert">
+          ${getFriendlyMessage(isOffline ? "offline" : "error")}
+        </p>
+
+        ${
+          isOffline
+            ? `<p>Tip: Turn on your internet connection and reload to update the content.</p>`
+            : `
+              <p>If the problem continues, try again.</p>
+              <p>
+                <button type="button" id="retry-btn">
+                  Try again
+                </button>
+              </p>
+            `
+        }
+      </div>
+    </section>
+  `;
+
+  const retryBtn = appEl.querySelector("#retry-btn");
+  if (retryBtn) {
+    retryBtn.addEventListener("click", () => renderHome(appEl));
   }
 }
+
+
+  const retryBtn = appEl.querySelector("#retry-btn");
+  if (retryBtn) retryBtn.addEventListener("click", () => renderHome(appEl));
+}
+
 
 function renderPosterSection({ title, route, items }) {
   return `
