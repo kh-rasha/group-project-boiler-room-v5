@@ -70,7 +70,7 @@ async function getDetailData(type, id) {
 
     return {
       title: item.name,
-      subtitle: "Spell",
+      subtitle: "Spell description:",
       img: null,
       description: item.description,
       fields: []
@@ -83,7 +83,7 @@ async function getDetailData(type, id) {
 
     return {
       title: b.attributes.title,
-      subtitle: "Book",
+      subtitle: "Book description:",
       img: b.attributes.cover,
       description: b.attributes.summary,
       fields: [
@@ -99,7 +99,7 @@ async function getDetailData(type, id) {
 
     return {
       title: m.attributes.title,
-      subtitle: "Movie",
+      subtitle: "Movie description:",
       img: m.attributes.poster,
       description: m.attributes.summary,
       fields: [
