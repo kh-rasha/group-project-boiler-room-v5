@@ -1,4 +1,5 @@
 import { renderCharacters } from "./views/charactersView.js";
+import { renderFavorites } from "./views/favoritesView.js";
 
 import { renderHome } from "./views/homeView.js";
 
@@ -17,6 +18,10 @@ export function renderRoute() {
   }
   if (hash.startsWith("#/characters")) {
     renderCharacters(app);
+    return;
+  }
+  if (hash.startsWith("#/favorites")) {
+    renderFavorites(app);
     return;
   }
 
