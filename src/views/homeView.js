@@ -190,7 +190,7 @@ function renderPosterSection({ title, route, items }) {
         ${items
           .map(
             (item) => `
-          <a class="poster-card" href="#/${route}?id=${encodeURIComponent(item.id)}">
+          <a class="poster-card" href="#/detail?type=${encodeURIComponent(route)}&id=${encodeURIComponent(item.id)}">
             <div class="poster-frame">
               ${
                 item.img
