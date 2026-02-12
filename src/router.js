@@ -1,6 +1,6 @@
 import { renderCharacters } from "./views/charactersView.js";
-
 import { renderHome } from "./views/homeView.js";
+import { renderDetail } from "./views/detailView.js";
 
 export function renderRoute() {
   const app = document.getElementById("app");
@@ -14,11 +14,17 @@ export function renderRoute() {
   if (hash.startsWith("#/home")) {
     renderHome(app);
     return;
+
   }
   if (hash.startsWith("#/characters")) {
     renderCharacters(app);
     return;
   }
+
+  if (hash.startsWith("#/detail")) {
+    renderDetail(app);
+    return;
+  } 
 
 
   // placeholders tills ni bygger vidare
