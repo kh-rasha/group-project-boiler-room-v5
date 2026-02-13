@@ -168,7 +168,6 @@ const movies = moviesJson.data;
           items: houses
         })}
 
-
         </div>
 
         <div class="side">
@@ -188,6 +187,21 @@ const movies = moviesJson.data;
         </div>
       </section>
     `;
+
+    // spara klickat kort
+  appEl.addEventListener("click", (e) => {
+  const link = e.target.closest("a.poster-card");
+  if (!link) return;
+  sessionStorage.setItem("restoreFocusHref", link.getAttribute("href"));
+}, { once: true });
+
+  // restore focus när man kommer tillbaka
+  const restore = sessionStorage.getItem("restoreFocusHref");
+  if (restore) {
+    const el = appEl.querySelector(`a[href="${CSS.escape(restore)}"]`);
+    el?.focus();
+    sessionStorage.removeItem("restoreFocusHref");
+  }
 
     // Favorites: initiera på alla grids på startsidan
     appEl.querySelectorAll(".poster-grid").forEach((grid) => {
