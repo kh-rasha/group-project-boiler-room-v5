@@ -131,8 +131,13 @@ function renderDetailCard(data, type, id) {
   return `
     <section class="content-card detail">
 
-      <a href="#/home" class="section-link">← Back</a>
-    <button
+    <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
+  <div class="detail-banner__inner">
+
+    <div class="detail-banner__actions">
+      <a href="#/home" class="back-link">← Back</a>
+
+      <button
         type="button"
         class="fav-btn fav-btn--detail"
         data-fav-btn
@@ -140,16 +145,15 @@ function renderDetailCard(data, type, id) {
         data-name="${escapeHtml(data.title)}"
         data-type="${escapeHtml(type)}"
         aria-pressed="false"
-        aria-label="Toggle favorite"
       >☆</button>
+    </div>
 
-      <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
-  <div class="detail-banner__inner">
     ${
       data.img
         ? `<img class="detail-banner__poster" src="${data.img}" alt="${escapeHtml(data.title)}" loading="lazy">`
         : `<div class="detail-banner__poster detail-banner__poster--ph"></div>`
     }
+
   </div>
 </div>
 

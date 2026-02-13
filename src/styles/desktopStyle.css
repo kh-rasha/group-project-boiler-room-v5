@@ -1,3 +1,5 @@
+/* Variables */
+
 :root {
   --gutter: 1.5rem;
 
@@ -224,6 +226,28 @@ body {
   color: #000;
 }
 
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.95);
+
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
 /* Side section */
 
 .side {
@@ -387,34 +411,12 @@ body {
   position: relative; /* allows absolute positioning inside */
 }
 
-/* make sure the star doesn't get centered by the grid layout */
-.fav-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 3;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  background: rgba(255, 255, 255, 0.95);
-
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-}
-
 /* keyboard focus */
 .fav-btn:focus-visible {
   outline: 3px solid #000;
   outline-offset: 3px;
 }
+
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -489,8 +491,6 @@ body {
   pointer-events: auto;
 }
 
-
-
 .top-nav.is-open .nav-links {
   opacity: 1;
   transform: translateY(0);
@@ -535,11 +535,10 @@ body {
 }
 
 .detail-banner {
-  height: 400px;                 /* ändra efter smak */
+  height: 400px;                 
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  margin: 1rem 0 2rem;
   background: #ddd;
 }
 
@@ -556,7 +555,6 @@ body {
   opacity: .75;
 }
 
-/* lite overlay för att lugna */
 .detail-banner::after {
   content: "";
   position: absolute;
@@ -564,16 +562,33 @@ body {
   background: rgba(255,255,255,.25);
 }
 
-/* centrerings-innre lager */
 .detail-banner__inner {
   position: relative;
   z-index: 1;
   height: 100%;
-  display: grid;
-  place-items: center;           /* <-- centrering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* själva postern */
+.detail-banner__actions{
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  right: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.back-link{
+  text-decoration: none;
+  font-weight: 600;
+  color: #111;
+  margin-top: 14px;
+  letter-spacing: 2px;
+}
+
 .detail-banner__poster {
   aspect-ratio: 2/3;
   height: 350px;
@@ -582,7 +597,6 @@ body {
   box-shadow: 0 18px 50px rgba(0,0,0,.25);
 }
 
-/* placeholder om ingen bild */
 .detail-banner__poster--ph {
   background: rgba(255,255,255,.6);
 }
