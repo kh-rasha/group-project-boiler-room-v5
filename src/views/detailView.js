@@ -16,10 +16,22 @@ export async function renderDetail(appEl) {
 
   try {
     const data = await getDetailData(type, id);
-
     if (!data) throw new Error("Not found");
 
     appEl.innerHTML = layout(renderDetailCard(data, type, id));
+
+    // Fokus på "stäng" (Back) när detalj öppnas
+    const back = appEl.querySelector("[data-back]");
+    back?.focus();
+
+    // ESC = stäng (gå tillbaka)
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        history.back(); 
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, { once: true });
 
     setupFavoritesUI(appEl);
     syncFavoritesUI(appEl);
@@ -28,10 +40,14 @@ export async function renderDetail(appEl) {
     console.error(err);
     appEl.innerHTML = layout(`
       <h1>Failed to load</h1>
-      <a href="#/home" class="section-link">← Back</a>
+      <a href="#/home" class="section-link" data-back>← Back</a>
     `);
+
+    // fokus även vid error
+    appEl.querySelector("[data-back]")?.focus();
   }
 }
+
 async function getDetailData(type, id) {
   const wanted = decodeURIComponent(id);
 
@@ -135,7 +151,7 @@ function renderDetailCard(data, type, id) {
   <div class="detail-banner__inner">
 
     <div class="detail-banner__actions">
-      <a href="#/home" class="back-link">← Back</a>
+      <a href="#/home" class="back-link" data-back>← Back</a>
 
       <button
         type="button"
