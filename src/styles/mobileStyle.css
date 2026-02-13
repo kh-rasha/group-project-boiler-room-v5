@@ -7,6 +7,19 @@
     align-items: start;
   }
 
+  /* Detail: alltid 1-kolumn, oavsett breakpoint */
+.layout.layout--detail {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout.layout--detail .main-col {
+  width: 100%;
+  max-width: 1200px;
+}
+
   .hero {
     grid-area: hero;
   }
