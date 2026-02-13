@@ -30,9 +30,7 @@
 
 /* Main section */
 
-html, body {
-  min-height: 100vh;
-}
+html, body {height: 100%;}
 
 body {
   display: flex;
@@ -541,17 +539,18 @@ body {
 }
 
 
-/* Detail section*/
+/* Detail section */
 
 .content-card.detail {
   position: relative;
-  width: 1200px;
+  width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
   padding: var(--gutter);
 }
 
 .detail-banner {
-  height: 400px;                 
+  height: 400px;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
@@ -587,7 +586,7 @@ body {
   justify-content: center;
 }
 
-.detail-banner__actions{
+.detail-banner__actions {
   position: absolute;
   top: 5px;
   left: 15px;
@@ -597,7 +596,7 @@ body {
   align-items: center;
 }
 
-.back-link{
+.back-link {
   text-decoration: none;
   font-weight: 600;
   color: #111;
@@ -639,10 +638,4 @@ body {
 .detail-row dt {
   font-weight: 600;
   color: #000;
-}
-
-@media (max-width: 768px) {
-  .detail-head {
-    grid-template-columns: 1fr;
-  }
 }

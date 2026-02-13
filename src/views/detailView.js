@@ -200,7 +200,7 @@ function renderDetailCard(data, type, id) {
 }
 function layout(inner) {
   return `
-    <section class="layout">
+    <section class="layout layout--detail">
       <div class="main-col">
         ${inner}
       </div>

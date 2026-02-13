@@ -19,11 +19,27 @@
     align-self: start;
   }
 
-
   .about,
   .browse {
     position: static;
   }
+
+}
+
+@media (max-width: 1200px) {
+
+  .content-card.detail {
+    width: 100%;
+  }
+
+  .detail-banner {
+    height: 320px;
+  }
+
+  .detail-banner__poster {
+    height: 260px;
+  }
+
 }
 
 @media (min-width: 700px) {
