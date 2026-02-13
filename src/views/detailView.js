@@ -143,19 +143,20 @@ function renderDetailCard(data, type, id) {
         aria-label="Toggle favorite"
       >☆</button>
 
-      <div class="detail-head">
+      <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
+  <div class="detail-banner__inner">
+    ${
+      data.img
+        ? `<img class="detail-banner__poster" src="${data.img}" alt="${escapeHtml(data.title)}" loading="lazy">`
+        : `<div class="detail-banner__poster detail-banner__poster--ph"></div>`
+    }
+  </div>
+</div>
 
-        ${
-          data.img
-            ? `<img class="detail-img" src="${data.img}" alt="${escapeHtml(data.title)}">`
-            : `<div class="detail-img detail-img--placeholder"></div>`
-        }
-
-        <div>
-          <h1>${escapeHtml(data.title)}</h1>
-          ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
-        </div>
-      </div>
+<div class="detail-meta">
+  <h1>${escapeHtml(data.title)}</h1>
+  ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
+</div>
 
       ${data.description ? `<p class="detail-desc">${escapeHtml(data.description)}</p>` : ""}
 
