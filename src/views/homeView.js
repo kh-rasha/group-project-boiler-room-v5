@@ -42,13 +42,16 @@ export async function renderHome(appEl) {
   `;
 
   appEl.innerHTML = `
-    <section class="layout">
-      <div class="main-col">
-        ${heroHtml}
-        <section class="content-card"><p>Loading…</p></section>
-      </div>
-    </section>
-  `;
+  <section class="layout">
+    <div class="main-col">
+      ${heroHtml}
+      <section class="content-card" id="home-status" aria-live="polite">
+        <p>Loading…</p>
+      </section>
+    </div>
+  </section>
+`;
+
 
   try {
   const [
@@ -81,11 +84,28 @@ export async function renderHome(appEl) {
     if (!huffRes.ok) throw new Error("Failed house hufflepuff");
 
     const characters = await charactersRes.json();
+    if (characters?.error === "offline") throw new Error("offline");
+    
     const spells = await spellsRes.json();
-    const books = (await booksRes.json()).data;
-    const movies = (await moviesRes.json()).data;
-    const [gryff, slyth, raven, huff] = await Promise.all([gryffRes.json(), slythRes.json(),ravenRes.json(),huffRes.json(),]);
+    if (spells?.error === "offline") throw new Error("offline");
 
+    const booksJson = await booksRes.json();
+if (booksJson?.error === "offline") throw new Error("offline");
+const books = booksJson.data;
+
+    const moviesJson = await moviesRes.json();
+if (moviesJson?.error === "offline") throw new Error("offline");
+const movies = moviesJson.data;
+
+    const [gryff, slyth, raven, huff] = await Promise.all([
+      gryffRes.json(),
+       slythRes.json(),
+       ravenRes.json(),
+       huffRes.json(),
+      ]);
+    if (![gryff, slyth, raven, huff].every(Array.isArray)) {
+  throw new Error("offline");
+}
     const houses = [
     { id: "gryffindor", name: "Gryffindor", count: gryff.length },
     { id: "slytherin", name: "Slytherin", count: slyth.length },
@@ -177,7 +197,13 @@ export async function renderHome(appEl) {
 } catch (err) {
   console.error(err);
 
-  const isOffline = !navigator.onLine;
+  const isOffline = !navigator.onLine || String(err?.message).includes("offline");
+
+  const banner = document.getElementById("offline-banner");
+if (banner && isOffline) {
+  banner.textContent = "You are offline — some data may not be up to date.";
+  banner.hidden = false;
+}
 
   appEl.innerHTML = `
     <section class="layout">
@@ -209,9 +235,6 @@ export async function renderHome(appEl) {
   }
 }
 
-
-  const retryBtn = appEl.querySelector("#retry-btn");
-  if (retryBtn) retryBtn.addEventListener("click", () => renderHome(appEl));
 }
 
 

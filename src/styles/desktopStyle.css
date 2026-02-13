@@ -526,7 +526,6 @@ body {
 }
 
 #offline-banner {
-  display: none;
   padding: .75rem 1rem;
   background: var(--hp-menu);
   color: var(--hp-parchment);
@@ -536,6 +535,11 @@ body {
   position: relative;
   z-index: 9999;
 }
+
+#offline-banner[hidden] {
+  display: none;
+}
+
 
 /* Detail section*/
 .content-card.detail {

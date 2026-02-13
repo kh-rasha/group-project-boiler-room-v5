@@ -52,23 +52,17 @@ if ("serviceWorker" in navigator) {
 
 /* ---------- Global Offline Banner ---------- */
 function updateOnlineStatus() {
-  let banner = document.getElementById("offline-banner");
-
-  if (!banner) {
-    banner = document.createElement("div");
-    banner.id = "offline-banner";
-    banner.setAttribute("role", "alert");
-    banner.setAttribute("aria-live", "polite");
-    document.body.prepend(banner);
-  }
+  const banner = document.getElementById("offline-banner");
+  if (!banner) return;
 
   if (!navigator.onLine) {
-    banner.textContent = "You are offline — some data may not be up to date.";
     banner.hidden = false;
   } else {
     banner.hidden = true;
   }
 }
+
+
 
 function boot() {
   renderRoute();
