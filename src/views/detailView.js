@@ -16,10 +16,22 @@ export async function renderDetail(appEl) {
 
   try {
     const data = await getDetailData(type, id);
-
     if (!data) throw new Error("Not found");
 
     appEl.innerHTML = layout(renderDetailCard(data, type, id));
+
+    // Fokus på "stäng" (Back) när detalj öppnas
+    const back = appEl.querySelector("[data-back]");
+    back?.focus();
+
+    // ESC = stäng (gå tillbaka)
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        history.back(); 
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, { once: true });
 
     setupFavoritesUI(appEl);
     syncFavoritesUI(appEl);
@@ -28,10 +40,14 @@ export async function renderDetail(appEl) {
     console.error(err);
     appEl.innerHTML = layout(`
       <h1>Failed to load</h1>
-      <a href="#/home" class="section-link">← Back</a>
+      <a href="#/home" class="section-link" data-back>← Back</a>
     `);
+
+    // fokus även vid error
+    appEl.querySelector("[data-back]")?.focus();
   }
 }
+
 async function getDetailData(type, id) {
   const wanted = decodeURIComponent(id);
 
@@ -70,7 +86,7 @@ async function getDetailData(type, id) {
 
     return {
       title: item.name,
-      subtitle: "Spell",
+      subtitle: "Spell description:",
       img: null,
       description: item.description,
       fields: []
@@ -83,7 +99,7 @@ async function getDetailData(type, id) {
 
     return {
       title: b.attributes.title,
-      subtitle: "Book",
+      subtitle: "Book description:",
       img: b.attributes.cover,
       description: b.attributes.summary,
       fields: [
@@ -99,7 +115,7 @@ async function getDetailData(type, id) {
 
     return {
       title: m.attributes.title,
-      subtitle: "Movie",
+      subtitle: "Movie description:",
       img: m.attributes.poster,
       description: m.attributes.summary,
       fields: [
@@ -131,8 +147,13 @@ function renderDetailCard(data, type, id) {
   return `
     <section class="content-card detail">
 
-      <a href="#/home" class="section-link">← Back</a>
-    <button
+    <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
+  <div class="detail-banner__inner">
+
+    <div class="detail-banner__actions">
+      <a href="#/home" class="back-link" data-back>← Back</a>
+
+      <button
         type="button"
         class="fav-btn fav-btn--detail"
         data-fav-btn
@@ -140,22 +161,22 @@ function renderDetailCard(data, type, id) {
         data-name="${escapeHtml(data.title)}"
         data-type="${escapeHtml(type)}"
         aria-pressed="false"
-        aria-label="Toggle favorite"
       >☆</button>
+    </div>
 
-      <div class="detail-head">
+    ${
+      data.img
+        ? `<img class="detail-banner__poster" src="${data.img}" alt="${escapeHtml(data.title)}" loading="lazy">`
+        : `<div class="detail-banner__poster detail-banner__poster--ph"></div>`
+    }
 
-        ${
-          data.img
-            ? `<img class="detail-img" src="${data.img}" alt="${escapeHtml(data.title)}">`
-            : `<div class="detail-img detail-img--placeholder"></div>`
-        }
+  </div>
+</div>
 
-        <div>
-          <h1>${escapeHtml(data.title)}</h1>
-          ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
-        </div>
-      </div>
+<div class="detail-meta">
+  <h1>${escapeHtml(data.title)}</h1>
+  ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
+</div>
 
       ${data.description ? `<p class="detail-desc">${escapeHtml(data.description)}</p>` : ""}
 
