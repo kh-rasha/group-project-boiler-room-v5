@@ -623,7 +623,8 @@ body {
 }
 
 .detail-dl {
-  margin-top: 4rem;
+  margin-top: 5rem;
+  margin-bottom: 0rem;
   display: grid;
   gap: 1rem;
 }

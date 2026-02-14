@@ -1,4 +1,4 @@
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .layout {
     display: grid;
     grid-template-columns: 3fr 1.2fr;
@@ -44,15 +44,6 @@
   .content-card.detail {
     width: 100%;
   }
-
-  .detail-banner {
-    height: 320px;
-  }
-
-  .detail-banner__poster {
-    height: 260px;
-  }
-
 }
 
 @media (min-width: 700px) {
@@ -96,5 +87,14 @@
     font-size: 1.5rem;
     letter-spacing: 0.14em;
   }
+
+  .detail-banner {
+    height: 320px;
+  }
+
+  .detail-banner__poster {
+    height: 260px;
+  }
 }
+
 
