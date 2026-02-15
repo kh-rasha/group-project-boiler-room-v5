@@ -56,44 +56,100 @@ export async function renderCharacters(appEl) {
         currentList = allCharacters;
         renderList(currentList, listEl);
         syncFavoritesUI(listEl);
-    } catch (err) {
-        console.error("Characters fetch failed:", err);
+} catch (err) {
+  console.error("Characters fetch failed:", err);
 
-        const offlineFavs = readFavoritesFromStorage();
+  // OFFLINE: show favorites if we have them
+  if (err?.type === "offline") {
+    const offlineFavs = readFavoritesFromStorage();
 
-        if (offlineFavs.length > 0) {
-            currentList = normalizeOfflineFavorites(offlineFavs);
+    if (offlineFavs.length > 0) {
+      currentList = normalizeOfflineFavorites(offlineFavs);
 
-            listEl.innerHTML = `
+      listEl.innerHTML = `
         <p role="status">
-          You are offline – showing saved favorites.
+          You are offline — showing saved favorites.
         </p>
+        <div class="poster-grid" id="offline-favs"></div>
       `;
-            // Render favorites list after the message
-            listEl.insertAdjacentHTML("beforeend", `<div class="offline-favs"></div>`);
-            const favContainer = listEl.querySelector(".offline-favs");
-            favContainer.className = "poster-grid"; // keep same layout
 
-            renderList(currentList, favContainer);
-            syncFavoritesUI(favContainer);
-        } else {
-            // ✅ Task #38 - point 3
-            listEl.innerHTML = `
-        <p role="alert">
-          You are offline and no favorites are saved.
-        </p>
-      `;
-        }
+      const favContainer = listEl.querySelector("#offline-favs");
+      renderList(currentList, favContainer);
+      syncFavoritesUI(favContainer);
+      return;
     }
+
+    listEl.innerHTML = `
+      <p role="alert">
+        You are offline and no favorites are saved.
+      </p>
+    `;
+    return;
+  }
+
+  // ONLINE (API / NETWORK) error: friendly message + retry
+  listEl.innerHTML = `
+    <p role="alert">
+      We couldn’t load characters right now. Please try again.
+    </p>
+    <p>
+      <button type="button" id="retry-characters">Try again</button>
+    </p>
+  `;
+
+  const retryBtn = appEl.querySelector("#retry-characters");
+  if (retryBtn) {
+    retryBtn.addEventListener("click", () => renderCharacters(appEl));
+  }
+}
+
 }
 
 /* ---------------- Helpers ---------------- */
 
-async function fetchCharacters() {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    return res.json();
+async function fetchCharacters({ timeoutMs = 8000 } = {}) {
+  if (!navigator.onLine) {
+    const err = new Error("offline");
+    err.type = "offline";
+    throw err;
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(API_URL, { signal: controller.signal });
+
+    if (!res.ok) {
+      const err = new Error(`API responded with ${res.status}`);
+      err.type = "api";
+      err.status = res.status;
+      throw err;
+    }
+
+    return await res.json();
+  } catch (e) {
+    if (e.name === "AbortError") {
+      const err = new Error("timeout");
+      err.type = "timeout";
+      throw err;
+    }
+
+    // om det blev offline mitt i
+    if (!navigator.onLine) {
+      const err = new Error("offline");
+      err.type = "offline";
+      throw err;
+    }
+
+    const err = new Error("network");
+    err.type = "network";
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
+
 
 function normalizeCharacters(data) {
     return (data || []).map((c) => ({

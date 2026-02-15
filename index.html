@@ -1,13 +1,24 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wizardpedia - Harry Potter Wiki</title>
-  </head>
+  <meta charset="UTF-8" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#6b21a8" />
+
+  <!--  Byt favicon från vite.svg till din egen -->
+  <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wizardpedia - Harry Potter Wiki</title>
+</head>
+
 
   <body>
+      <div id="offline-banner" hidden>
+    ⚠ You are offline. Some content may not be available.
+    </div>
     <header class="site-header">
   <div class="container">
     <nav class="top-nav" aria-label="Huvudnavigation">
@@ -15,8 +26,12 @@
       <span class="logo">Wizardpedia - Harry Potter Wiki</span>
 
       <ul class="nav-links" id="primary-nav">
-        <li><a href="#/browse">Browse</a></li>
+        <li><a href="#/home">Home</a></li>
         <li><a href="#/characters">Characters</a></li>
+        <li><a href="#/books">Books</a></li>
+        <li><a href="#/movies">Movies</a></li>
+        <li><a href="#/spells">Spells</a></li>
+        <li><a href="#/houses">Houses</a></li>
         <li><a href="#/about">About us</a></li>
         <li><a href="#/favorites">Favorites</a></li>
 

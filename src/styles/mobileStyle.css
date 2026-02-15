@@ -1,4 +1,4 @@
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .layout {
     display: grid;
     grid-template-columns: 3fr 1.2fr;
@@ -6,6 +6,19 @@
     gap: 2rem;
     align-items: start;
   }
+
+  /* Detail: alltid 1-kolumn, oavsett breakpoint */
+.layout.layout--detail {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout.layout--detail .main-col {
+  width: 100%;
+  max-width: 1200px;
+}
 
   .hero {
     grid-area: hero;
@@ -19,10 +32,17 @@
     align-self: start;
   }
 
-
   .about,
   .browse {
     position: static;
+  }
+
+}
+
+@media (max-width: 1200px) {
+
+  .content-card.detail {
+    width: 100%;
   }
 }
 
@@ -67,5 +87,14 @@
     font-size: 1.5rem;
     letter-spacing: 0.14em;
   }
+
+  .detail-banner {
+    height: 320px;
+  }
+
+  .detail-banner__poster {
+    height: 260px;
+  }
 }
+
 

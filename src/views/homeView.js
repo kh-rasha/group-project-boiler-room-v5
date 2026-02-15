@@ -4,6 +4,14 @@ import { HOUSE_IMAGES } from "../utils/houseImages.js";
 const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
 
+function getFriendlyMessage(type) {
+  if (type === "offline") {
+    return "You are offline — we can’t fetch new data right now. Favorites will still work.";
+  }
+  return "We couldn’t load the data right now. Please try again in a moment.";
+}
+
+
 export async function renderHome(appEl) {
   const heroHtml = `
     <section class="hero content-card" aria-labelledby="hero-title">
@@ -34,13 +42,16 @@ export async function renderHome(appEl) {
   `;
 
   appEl.innerHTML = `
-    <section class="layout">
-      <div class="main-col">
-        ${heroHtml}
-        <section class="content-card"><p>Loading…</p></section>
-      </div>
-    </section>
-  `;
+  <section class="layout">
+    <div class="main-col">
+      ${heroHtml}
+      <section class="content-card" id="home-status" aria-live="polite">
+        <p>Loading…</p>
+      </section>
+    </div>
+  </section>
+`;
+
 
   try {
   const [
@@ -73,11 +84,28 @@ export async function renderHome(appEl) {
     if (!huffRes.ok) throw new Error("Failed house hufflepuff");
 
     const characters = await charactersRes.json();
+    if (characters?.error === "offline") throw new Error("offline");
+    
     const spells = await spellsRes.json();
-    const books = (await booksRes.json()).data;
-    const movies = (await moviesRes.json()).data;
-    const [gryff, slyth, raven, huff] = await Promise.all([gryffRes.json(), slythRes.json(),ravenRes.json(),huffRes.json(),]);
+    if (spells?.error === "offline") throw new Error("offline");
 
+    const booksJson = await booksRes.json();
+if (booksJson?.error === "offline") throw new Error("offline");
+const books = booksJson.data;
+
+    const moviesJson = await moviesRes.json();
+if (moviesJson?.error === "offline") throw new Error("offline");
+const movies = moviesJson.data;
+
+    const [gryff, slyth, raven, huff] = await Promise.all([
+      gryffRes.json(),
+       slythRes.json(),
+       ravenRes.json(),
+       huffRes.json(),
+      ]);
+    if (![gryff, slyth, raven, huff].every(Array.isArray)) {
+  throw new Error("offline");
+}
     const houses = [
     { id: "gryffindor", name: "Gryffindor", count: gryff.length },
     { id: "slytherin", name: "Slytherin", count: slyth.length },
@@ -140,7 +168,6 @@ export async function renderHome(appEl) {
           items: houses
         })}
 
-
         </div>
 
         <div class="side">
@@ -161,22 +188,69 @@ export async function renderHome(appEl) {
       </section>
     `;
 
+    // spara klickat kort
+  appEl.addEventListener("click", (e) => {
+  const link = e.target.closest("a.poster-card");
+  if (!link) return;
+  sessionStorage.setItem("restoreFocusHref", link.getAttribute("href"));
+}, { once: true });
+
+  // restore focus när man kommer tillbaka
+  const restore = sessionStorage.getItem("restoreFocusHref");
+  if (restore) {
+    const el = appEl.querySelector(`a[href="${CSS.escape(restore)}"]`);
+    el?.focus();
+    sessionStorage.removeItem("restoreFocusHref");
+  }
+
     // Favorites: initiera på alla grids på startsidan
     appEl.querySelectorAll(".poster-grid").forEach((grid) => {
       setupFavoritesUI(grid);
       syncFavoritesUI(grid);
     });
-  } catch (err) {
-    appEl.innerHTML = `
-      <section class="layout">
-        <div class="main-col">
-          ${heroHtml}
-          <p role="alert">Failed to load magical data.</p>
-        </div>
-      </section>
-    `;
+} catch (err) {
+  console.error(err);
+
+  const isOffline = !navigator.onLine || String(err?.message).includes("offline");
+
+  const banner = document.getElementById("offline-banner");
+if (banner && isOffline) {
+  banner.textContent = "You are offline — some data may not be up to date.";
+  banner.hidden = false;
+}
+
+  appEl.innerHTML = `
+    <section class="layout">
+      <div class="main-col">
+        ${heroHtml}
+        <p role="alert">
+          ${getFriendlyMessage(isOffline ? "offline" : "error")}
+        </p>
+
+        ${
+          isOffline
+            ? `<p>Tip: Turn on your internet connection and reload to update the content.</p>`
+            : `
+              <p>If the problem continues, try again.</p>
+              <p>
+                <button type="button" id="retry-btn">
+                  Try again
+                </button>
+              </p>
+            `
+        }
+      </div>
+    </section>
+  `;
+
+  const retryBtn = appEl.querySelector("#retry-btn");
+  if (retryBtn) {
+    retryBtn.addEventListener("click", () => renderHome(appEl));
   }
 }
+
+}
+
 
 function renderPosterSection({ title, route, items }) {
   return `
@@ -190,7 +264,7 @@ function renderPosterSection({ title, route, items }) {
         ${items
           .map(
             (item) => `
-          <a class="poster-card" href="#/${route}?id=${encodeURIComponent(item.id)}">
+          <a class="poster-card" href="#/detail?type=${encodeURIComponent(route)}&id=${encodeURIComponent(item.id)}">
             <div class="poster-frame">
               ${
                 item.img
