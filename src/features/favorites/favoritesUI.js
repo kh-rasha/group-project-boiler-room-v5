@@ -1,5 +1,4 @@
 
-// src/features/favorites/favoritesUI.js
 import { isFavorite, toggleFavorite } from "../../storage/favoritesStorage.js";
 
 /**

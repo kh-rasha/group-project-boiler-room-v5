@@ -1,4 +1,4 @@
-// src/views/charactersView.js
+
 import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favoritesUI.js";
 
 const API_URL = "https://hp-api.onrender.com/api/characters";
@@ -196,28 +196,22 @@ function renderList(items, listEl) {
         .map(
             (c) => `
       <div class="poster-card">
-        <a href="#/character?id=${encodeURIComponent(c.id)}" class="poster-link">
-          <div class="poster-frame">
-            ${
+  <a href="#/character?id=${encodeURIComponent(c.id)}" class="poster-card">
+    <div class="poster-frame">
+      ${
                 c.image
                     ? `<img class="poster-img" src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" loading="lazy" />`
                     : `<div class="img-placeholder" aria-hidden="true"></div>`
             }
-          </div>
-          <h3 class="poster-title">${escapeHtml(c.name)}</h3>
-          <p class="poster-subtitle">${escapeHtml(c.house)}</p>
-        </a>
+    </div>
 
-        <button
-          type="button"
-          class="fav-btn"
-          data-fav-btn
-          data-id="${escapeHtml(c.id)}"
-          data-name="${escapeHtml(c.name)}"
-          aria-pressed="false"
-          aria-label="Add to favorites"
-        >☆</button>
-      </div>
+    <h3 class="poster-title">${escapeHtml(c.name)}</h3>
+    <p class="poster-subtitle">${escapeHtml(c.house)}</p>
+  </a>
+
+  <button type="button" class="fav-btn" ...>☆</button>
+</div>
+
     `
         )
         .join("");

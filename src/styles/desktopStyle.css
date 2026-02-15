@@ -704,3 +704,21 @@ body {
   font-weight: 600;
   color: #000;
 }
+/* make the div.poster-card behave like your old a.poster-card */
+.poster-card {
+  text-decoration: none;
+  color: #000;
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+}
+
+/* style the actual link inside */
+.poster-link {
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+  width: 100%;
+}

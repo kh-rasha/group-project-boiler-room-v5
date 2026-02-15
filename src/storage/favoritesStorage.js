@@ -1,4 +1,4 @@
-// src/storage/favoritesStorage.js
+
 
 const STORAGE_KEY = "wizardpedia:favorites:v1";
 
