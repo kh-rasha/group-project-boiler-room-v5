@@ -22,11 +22,7 @@ export async function renderListPage(appEl, { type }) {
     <section class="layout layout--detail">
       <div class="main-col">
         <section class="content-card">
-
-        <div class="detail-banner__actions">
           <a href="#" class="back-link" data-back>← Back</a>
-        </div>
-
           <header class="page-header">
             <h1>${escapeHtml(cfg.title)}</h1>
 
