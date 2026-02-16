@@ -8,102 +8,89 @@ let allCharacters = [];
 let currentList = []; // what we are currently showing (online list OR offline favorites)
 
 export async function renderCharacters(appEl) {
-    appEl.innerHTML = `
-    <section class="page">
-      <header class="page-header">
-        <h1>Characters</h1>
+  appEl.innerHTML = `
+    <section class="layout layout--detail">
+      <div class="main-col">
+        <section class="content-card">
+          <header class="page-header">
+            <h1>Characters</h1>
 
-        <label for="character-search" class="sr-only">Search characters</label>
-        <input
-          type="search"
-          id="character-search"
-          placeholder="Search characters…"
-          aria-label="Search characters"
-          autocomplete="off"
-        />
-      </header>
+            <label for="character-search" class="sr-only">Search characters</label>
+            <input
+              type="search"
+              id="character-search"
+              placeholder="Search characters…"
+              aria-label="Search characters"
+              autocomplete="off"
+            />
+          </header>
 
-      <div id="characters-list" class="poster-grid" aria-live="polite">
-        <p>Loading characters…</p>
+          <div id="characters-list" aria-live="polite">
+            <p>Loading characters…</p>
+          </div>
+        </section>
       </div>
     </section>
   `;
 
-    const listEl = appEl.querySelector("#characters-list");
-    const searchEl = appEl.querySelector("#character-search");
+  const listEl = appEl.querySelector("#characters-list");
+  const searchEl = appEl.querySelector("#character-search");
 
-    // Favorites click handling (event delegation)
-    setupFavoritesUI(listEl);
+  setupFavoritesUI(listEl);
 
-    // One search listener only (no duplicates)
-    searchEl.addEventListener("input", () => {
-        const q = searchEl.value.trim().toLowerCase();
-        const filtered = filterByName(currentList, q);
+  searchEl.addEventListener("input", () => {
+    const q = searchEl.value.trim().toLowerCase();
+    const filtered = filterByName(currentList, q);
 
-        renderList(filtered, listEl);
-        syncFavoritesUI(listEl);
+    renderList(filtered, listEl);
+    syncFavoritesUI(listEl);
 
-        if (filtered.length === 0) {
-            listEl.innerHTML = `<p role="status">No matches found.</p>`;
-        }
-    });
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<p role="status">No matches found.</p>`;
+    }
+  });
 
-    // Try online first, fallback to offline favorites
-    try {
-        const data = await fetchCharacters();
-        allCharacters = normalizeCharacters(data);
+  try {
+    const data = await fetchCharacters();
+    allCharacters = normalizeCharacters(data);
 
-        currentList = allCharacters;
-        renderList(currentList, listEl);
-        syncFavoritesUI(listEl);
-} catch (err) {
-  console.error("Characters fetch failed:", err);
+    currentList = allCharacters;
+    renderList(currentList, listEl);
+    syncFavoritesUI(listEl);
+  } catch (err) {
+    console.error("Characters fetch failed:", err);
 
-  // OFFLINE: show favorites if we have them
-  if (err?.type === "offline") {
-    const offlineFavs = readFavoritesFromStorage();
+    if (err?.type === "offline") {
+      const offlineFavs = readFavoritesFromStorage();
 
-    if (offlineFavs.length > 0) {
-      currentList = normalizeOfflineFavorites(offlineFavs);
+      if (offlineFavs.length > 0) {
+        currentList = normalizeOfflineFavorites(offlineFavs);
 
-      listEl.innerHTML = `
-        <p role="status">
-          You are offline — showing saved favorites.
-        </p>
-        <div class="poster-grid" id="offline-favs"></div>
-      `;
+        listEl.innerHTML = `
+          <p role="status">You are offline — showing saved favorites.</p>
+          <div class="poster-grid" id="offline-favs"></div>
+        `;
 
-      const favContainer = listEl.querySelector("#offline-favs");
-      renderList(currentList, favContainer);
-      syncFavoritesUI(favContainer);
+        const favContainer = listEl.querySelector("#offline-favs");
+        renderList(currentList, favContainer);
+        syncFavoritesUI(favContainer);
+        return;
+      }
+
+      listEl.innerHTML = `<p role="alert">You are offline and no favorites are saved.</p>`;
       return;
     }
 
     listEl.innerHTML = `
-      <p role="alert">
-        You are offline and no favorites are saved.
-      </p>
+      <p role="alert">We couldn’t load characters right now. Please try again.</p>
+      <p><button type="button" id="retry-characters">Try again</button></p>
     `;
-    return;
-  }
 
-  // ONLINE (API / NETWORK) error: friendly message + retry
-  listEl.innerHTML = `
-    <p role="alert">
-      We couldn’t load characters right now. Please try again.
-    </p>
-    <p>
-      <button type="button" id="retry-characters">Try again</button>
-    </p>
-  `;
-
-  const retryBtn = appEl.querySelector("#retry-characters");
-  if (retryBtn) {
-    retryBtn.addEventListener("click", () => renderCharacters(appEl));
+    const retryBtn = appEl.querySelector("#retry-characters");
+    retryBtn?.addEventListener("click", () => renderCharacters(appEl));
   }
 }
 
-}
 
 /* ---------------- Helpers ---------------- */
 
@@ -186,35 +173,40 @@ function filterByName(items, query) {
 }
 
 function renderList(items, listEl) {
-    if (!items.length) {
-        listEl.innerHTML = `<p role="status">No characters found.</p>`;
-        return;
-    }
+  if (!items.length) {
+    listEl.innerHTML = `<p role="status">No characters found.</p>`;
+    return;
+  }
 
-    listEl.innerHTML = items
-        .slice(0, 50)
-        .map(
-            (c) => `
-      <div class="poster-card">
-  <a href="#/character?id=${encodeURIComponent(c.id)}" class="poster-card">
-    <div class="poster-frame">
-      ${
-                c.image
-                    ? `<img class="poster-img" src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" loading="lazy" />`
-                    : `<div class="img-placeholder" aria-hidden="true"></div>`
+  listEl.innerHTML = `
+    <div class="poster-grid">
+      ${items.slice(0, 50).map((c) => `
+        <a href="#/detail?type=characters&id=${encodeURIComponent(c.id)}" class="poster-card">
+          <div class="poster-frame">
+            ${
+              c.image
+                ? `<img class="poster-img" src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" loading="lazy" />`
+                : `<div class="poster-placeholder" aria-hidden="true"></div>`
             }
+
+            <button
+              type="button"
+              class="fav-btn"
+              data-fav-btn
+              data-id="${escapeHtml(c.id)}"
+              data-name="${escapeHtml(c.name)}"
+              data-type="characters"
+              aria-pressed="false"
+              aria-label="Toggle favorite"
+            >☆</button>
+          </div>
+
+          <h3 class="poster-title">${escapeHtml(c.name)}</h3>
+          <p class="poster-subtitle">${escapeHtml(c.house)}</p>
+        </a>
+      `).join("")}
     </div>
-
-    <h3 class="poster-title">${escapeHtml(c.name)}</h3>
-    <p class="poster-subtitle">${escapeHtml(c.house)}</p>
-  </a>
-
-  <button type="button" class="fav-btn" ...>☆</button>
-</div>
-
-    `
-        )
-        .join("");
+  `;
 }
 
 function escapeHtml(s) {

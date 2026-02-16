@@ -198,6 +198,7 @@ function renderDetailCard(data, type, id) {
     </section>
   `;
 }
+
 function layout(inner) {
   return `
     <section class="layout layout--detail">
@@ -207,6 +208,7 @@ function layout(inner) {
     </section>
   `;
 }
+
 function getParams() {
   const hash = window.location.hash || "";
   const queryIndex = hash.indexOf("?");
