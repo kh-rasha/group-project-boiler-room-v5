@@ -24,6 +24,17 @@ export async function renderDetail(appEl) {
     const back = appEl.querySelector("[data-back]");
     back?.focus();
 
+    // Går tillbaka till senaste öppnade sidan
+    back?.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      if (history.length > 1) {
+        history.back();
+      } else {
+        location.hash = "#/home";
+      }
+    });
+
     // ESC = stäng (gå tillbaka)
     const onKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -151,7 +162,7 @@ function renderDetailCard(data, type, id) {
   <div class="detail-banner__inner">
 
     <div class="detail-banner__actions">
-      <a href="#/home" class="back-link" data-back>← Back</a>
+      <a href="javascript:void(0)" class="back-link" data-back>← Back</a>
 
       <button
         type="button"
