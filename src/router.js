@@ -1,39 +1,28 @@
-import { renderCharacters } from "./views/charactersView.js";
-import { renderFavorites } from "./views/favoritesView.js";
-
 import { renderHome } from "./views/homeView.js";
 import { renderDetail } from "./views/detailView.js";
+
+import { renderCharacters } from "./views/charactersView.js";
+import { renderBooks } from "./views/booksView.js";
+import { renderMovies } from "./views/moviesView.js";
+import { renderSpells } from "./views/spellsView.js";
+import { renderHouses } from "./views/housesView.js";
 
 export function renderRoute() {
   const app = document.getElementById("app");
   const main = document.getElementById("main");
-
-  // fokus på main vid vybyte (tangentbord)
   main?.focus();
 
   const hash = location.hash || "#/home";
 
-  if (hash.startsWith("#/home")) {
-    renderHome(app);
-    return;
+  if (hash.startsWith("#/home")) return renderHome(app);
+  if (hash.startsWith("#/detail")) return renderDetail(app);
 
-  }
-  if (hash.startsWith("#/characters")) {
-    renderCharacters(app);
-    return;
-  }
-  if (hash.startsWith("#/favorites")) {
-    renderFavorites(app);
-    return;
-  }
+  if (hash.startsWith("#/characters")) return renderCharacters(app);
+  if (hash.startsWith("#/books")) return renderBooks(app);
+  if (hash.startsWith("#/movies")) return renderMovies(app);
+  if (hash.startsWith("#/spells")) return renderSpells(app);
+  if (hash.startsWith("#/houses")) return renderHouses(app);
 
-  if (hash.startsWith("#/detail")) {
-    renderDetail(app);
-    return;
-  }
-
-
-  // placeholders tills ni bygger vidare
   app.innerHTML = `
     <section>
       <h1>Inte byggt än</h1>
