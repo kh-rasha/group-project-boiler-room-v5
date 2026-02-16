@@ -1,11 +1,11 @@
 import { renderHome } from "./views/homeView.js";
 import { renderDetail } from "./views/detailView.js";
 
-import { renderCharacters } from "./views/charactersView.js";
-import { renderBooks } from "./views/booksView.js";
-import { renderMovies } from "./views/moviesView.js";
-import { renderSpells } from "./views/spellsView.js";
-import { renderHouses } from "./views/housesView.js";
+import { renderCharacters } from "./views/listViews/charactersView.js";
+import { renderBooks } from "./views/listViews/booksView.js";
+import { renderMovies } from "./views/listViews/moviesView.js";
+import { renderSpells } from "./views/listViews/spellsView.js";
+import { renderHouses } from "./views/listViews/housesView.js";
 
 export function renderRoute() {
   const app = document.getElementById("app");

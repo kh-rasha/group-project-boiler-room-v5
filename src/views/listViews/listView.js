@@ -1,6 +1,6 @@
 // views/listView.js
-import { setupFavoritesUI, syncFavoritesUI } from "../features/favorites/favoritesUI.js";
-import { HOUSE_IMAGES } from "../utils/houseImages.js";
+import { setupFavoritesUI, syncFavoritesUI } from "../../features/favorites/favoritesUI.js";
+import { HOUSE_IMAGES } from "../../utils/houseImages.js";
 
 const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
@@ -46,6 +46,7 @@ export async function renderListPage(appEl, { type }) {
 
   const back = appEl.querySelector("[data-back]");
 
+  // Går tillbaka till senaste öppnade sidan
   back?.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -55,6 +56,15 @@ export async function renderListPage(appEl, { type }) {
       location.hash = "#/home";
     }
   });
+
+  // ESC = stäng (gå tillbaka)
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        history.back(); 
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, { once: true });
 
   const gridEl = appEl.querySelector("#list-grid");
   const searchEl = appEl.querySelector("#list-search");
