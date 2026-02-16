@@ -175,8 +175,8 @@ body {
   color: #000;
   display: grid;
   gap: 0.6rem;
-  justify-items: center; 
-  
+  justify-items: center;
+
 }
 
 .poster-frame {
@@ -205,7 +205,7 @@ body {
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
-  color: #4a63ff; 
+  color: #1e3a8a;
 }
 
 .poster-card:hover .poster-img {
@@ -361,14 +361,17 @@ body {
 
 .menu-btn:focus-visible,
 .nav-links a:focus-visible {
-  outline: none;
   box-shadow:
-    0 0 0 3px rgba(255, 215, 120, 0.9),
-    0 0 12px rgba(255, 215, 120, 0.8),
-    0 0 20px rgba(255, 215, 120, 0.6);
-      background: rgba(199,162,74,0.10);
+          0 0 0 3px rgba(255, 215, 120, 0.9),
+          0 0 0 12px rgba(255, 215, 120, 0.8),
+          0 0 20px rgba(255, 215, 120, 0.6);
+  background: rgba(199, 162, 74, 0.10);
   border-radius: 10px;
+
+  outline: 2px solid rgba(255, 215, 120, 0.9);
+  outline-offset: 3px;
 }
+
 @keyframes magicPulse {
   0% {
     box-shadow:
@@ -695,11 +698,11 @@ body {
 }
 /* make the div.poster-card behave like your old a.poster-card */
 .poster-card {
-  text-decoration: none;
-  color: #000;
-  display: grid;
-  gap: 0.6rem;
-  justify-items: center;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1e3a8a;
 }
 
 /* style the actual link inside */
@@ -711,3 +714,17 @@ body {
   justify-items: center;
   width: 100%;
 }
+.menu-btn:focus,
+.nav-links a:focus {
+  outline: 2px solid rgba(255, 215, 120, 0.9);
+  outline-offset: 3px;
+}
+
+.menu-btn:focus:not(:focus-visible),
+.nav-links a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+.skip-link{position:absolute;left:-9999px;top:0}
+.skip-link:focus{left:1rem;top:1rem}
