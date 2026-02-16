@@ -12,9 +12,10 @@ export async function renderCharacters(appEl) {
     <section class="layout layout--detail">
       <div class="main-col">
         <section class="content-card">
+          <a href="#/home" class="back-link" data-back>← Back</a>
+        
           <header class="page-header">
             <h1>Characters</h1>
-
             <label for="character-search" class="sr-only">Search characters</label>
             <input
               type="search"
@@ -32,6 +33,18 @@ export async function renderCharacters(appEl) {
       </div>
     </section>
   `;
+
+const back = appEl.querySelector("[data-back]");
+back?.focus();
+
+const onKeyDown = (e) => {
+  if (e.key === "Escape") {
+    e.preventDefault();
+    history.back();
+  }
+};
+
+window.addEventListener("keydown", onKeyDown, { once: true });
 
   const listEl = appEl.querySelector("#characters-list");
   const searchEl = appEl.querySelector("#character-search");
