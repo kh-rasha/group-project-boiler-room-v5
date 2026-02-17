@@ -1,4 +1,3 @@
-// views/listView.js
 import { setupFavoritesUI, syncFavoritesUI } from "../../features/favorites/favoritesUI.js";
 import { HOUSE_IMAGES } from "../../utils/houseImages.js";
 
@@ -6,10 +5,7 @@ const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
 const STORAGE_KEY = "wizardpedia:favorites:v1";
 
-/**
- * Renderar en lista (characters/books/movies/spells/houses) i en content-card,
- * med samma poster-grid och favorites.
- */
+ // Renderar en lista (characters/books/movies/spells/houses) i en content-card,
 export async function renderListPage(appEl, { type }) {
   const cfg = LIST_CONFIG[type];
   if (!cfg) {
@@ -17,7 +13,6 @@ export async function renderListPage(appEl, { type }) {
     return;
   }
 
-  // Layout: en card som innehåller header + grid
   appEl.innerHTML = `
     <section class="layout layout--detail">
       <div class="main-col">
@@ -74,7 +69,6 @@ export async function renderListPage(appEl, { type }) {
 
   let currentList = [];
 
-  // Sök (en listener, inga dubletter)
   searchEl.addEventListener("input", () => {
     const q = searchEl.value.trim().toLowerCase();
     const filtered = q
@@ -196,7 +190,6 @@ const LIST_CONFIG = {
 
   houses: {
     title: "Houses",
-    // Enklast: lokala “items” + crest-bilder från HOUSE_IMAGES (som du redan har)
     fetcher: async () => ([
       { id: "gryffindor", name: "Gryffindor" },
       { id: "slytherin", name: "Slytherin" },
