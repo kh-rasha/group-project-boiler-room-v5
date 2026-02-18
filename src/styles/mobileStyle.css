@@ -95,6 +95,10 @@
   .detail-banner__poster {
     height: 260px;
   }
+
+  .filters { 
+    grid-template-columns: 1fr; 
+  }
 }
 
 

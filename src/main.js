@@ -39,7 +39,7 @@ function initMenu() {
   });
 }
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", async () => {
     try {
       await navigator.serviceWorker.register("/sw.js");

@@ -22,6 +22,7 @@ export async function renderListPage(appEl, { type }) {
             <h1>${escapeHtml(cfg.title)}</h1>
 
             <label for="list-search" class="sr-only">Search</label>
+
             <input
               type="search"
               id="list-search"
@@ -29,11 +30,29 @@ export async function renderListPage(appEl, { type }) {
               aria-label="Search ${escapeHtml(cfg.title)}"
               autocomplete="off"
             />
-          </header>
+
+            <div class="filters" role="group" aria-label="Filters">
+              <label class="filter-label" for="filter-by">Filter</label>
+              <select id="filter-by">
+                <option value="">None</option>
+                <option value="house">House</option>
+                <option value="species">Species</option>
+              </select>
+
+              <label class="filter-label" for="filter-value">Type</label>
+              <select id="filter-value" disabled>
+                <option value="">All</option>
+              </select>
+
+              <button type="button" id="filter-clear">Clear</button>
+            </div>
 
           <div id="list-grid" class="poster-grid" aria-live="polite">
             <p>Loading…</p>
           </div>
+          </header>
+
+         
         </section>
       </div>
     </section>
@@ -62,7 +81,83 @@ export async function renderListPage(appEl, { type }) {
     window.addEventListener("keydown", onKeyDown, { once: true });
 
   const gridEl = appEl.querySelector("#list-grid");
-  const searchEl = appEl.querySelector("#list-search");
+  const searchEl = appEl.querySelector("#list-search")
+  const filterByEl = appEl.querySelector("#filter-by");
+  const filterValueEl = appEl.querySelector("#filter-value");
+  const clearBtn = appEl.querySelector("#filter-clear");
+
+  let selectedKey = "";   // "house" | "species" | ""
+  let selectedVal = "";   // value from filter-value
+
+  function fillValueOptions(items, key) {
+    const values = Array.from(
+      new Set(items.map(x => (x[key] || "").trim()).filter(Boolean))
+    ).sort((a,b) => a.localeCompare(b));
+
+    filterValueEl.innerHTML = `<option value="">All</option>`;
+    values.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v;
+      opt.textContent = v;
+      filterValueEl.appendChild(opt);
+    });
+
+    filterValueEl.disabled = false;
+  }
+
+  function applyFilters() {
+    const q = searchEl.value.trim().toLowerCase();
+
+    let list = currentList;
+
+    if (selectedKey && selectedVal) {
+      list = list.filter(x => (x[selectedKey] || "") === selectedVal);
+    }
+
+    if (q) {
+      list = list.filter(x => (x.name || "").toLowerCase().includes(q));
+    }
+
+    renderList(list, gridEl, type);
+    syncFavoritesUI(gridEl);
+
+    if (!list.length) gridEl.innerHTML = `<p role="status">No matches found.</p>`;
+  }
+
+  // events
+  filterByEl.addEventListener("change", () => {
+    selectedKey = filterByEl.value; // "" | "house" | "species"
+    selectedVal = "";
+
+    if (!selectedKey) {
+      filterValueEl.innerHTML = `<option value="">All</option>`;
+      filterValueEl.disabled = true;
+      applyFilters();
+      return;
+    }
+
+    fillValueOptions(currentList, selectedKey);
+    applyFilters();
+  });
+
+  filterValueEl.addEventListener("change", () => {
+    selectedVal = filterValueEl.value;
+    applyFilters();
+  });
+
+  clearBtn.addEventListener("click", () => {
+    searchEl.value = "";
+    filterByEl.value = "";
+    filterValueEl.innerHTML = `<option value="">All</option>`;
+    filterValueEl.disabled = true;
+    selectedKey = "";
+    selectedVal = "";
+    applyFilters();
+    searchEl.focus();
+  });
+
+  searchEl.addEventListener("input", applyFilters);
+
 
   // Favorites (delegation)
   setupFavoritesUI(gridEl);
@@ -138,12 +233,14 @@ const LIST_CONFIG = {
     title: "Characters",
     fetcher: () => fetchWithHandling(`${HP_API}/characters`),
     normalize: (data) =>
-      (data || []).map((c) => ({
-        id: c.id || c.name,
-        name: c.name || "Unknown",
-        subtitle: c.house || "Unknown",
-        img: c.image || "",
-      })),
+  (data || []).map((c) => ({
+    id: c.id || c.name,
+    name: c.name || "Unknown",
+    subtitle: c.house || "Unknown",
+    house: c.house || "",
+    species: c.species || "",
+    img: c.image || "",
+  })),
   },
 
   spells: {
@@ -304,11 +401,8 @@ function readFavoritesFromStorage() {
   }
 }
 
-/**
- * Kompatibel filtrering:
- * - Om favorites har {type}, filtrera på type
- * - Om favorites saknar type (äldre), visa allt istället för att visa inget
- */
+ // Kompatibel filtrering:
+ 
 function filterFavsByTypeCompatible(favs, type) {
   const hasType = favs.some((f) => "type" in (f || {}));
   if (!hasType) return favs;
