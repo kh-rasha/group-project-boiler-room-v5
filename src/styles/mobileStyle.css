@@ -49,8 +49,6 @@
   .poster-grid {
     grid-template-columns: repeat(3, minmax(200px, 1fr));
   }
-
-  
 }
 
 

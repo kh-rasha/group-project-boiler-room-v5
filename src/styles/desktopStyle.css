@@ -37,6 +37,7 @@ html {
 html, body {height: 100%;}
 
 body {
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -177,7 +178,11 @@ body {
 .posterlist-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(3, minmax(371px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.posterlist-grid {
+  width: 100%;
 }
 
 .poster-card {
