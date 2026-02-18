@@ -30,6 +30,10 @@
 
 /* Main section */
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html, body {height: 100%;}
 
 body {
@@ -167,7 +171,13 @@ body {
 .poster-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.posterlist-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(371px, 1fr));
 }
 
 .poster-card {

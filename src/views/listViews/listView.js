@@ -16,7 +16,7 @@ export async function renderListPage(appEl, { type }) {
   appEl.innerHTML = `
     <section class="layout layout--detail">
       <div class="main-col">
-        <section class="content-card">
+        <section class="content-card detail">
           <a href="#" class="back-link" data-back>← Back</a>
           <header class="page-header">
             <h1>${escapeHtml(cfg.title)}</h1>
@@ -31,23 +31,24 @@ export async function renderListPage(appEl, { type }) {
               autocomplete="off"
             />
 
+            ${(cfg.filters?.length ? `
             <div class="filters" role="group" aria-label="Filters">
               <label class="filter-label" for="filter-by">Filter</label>
               <select id="filter-by">
                 <option value="">None</option>
-                <option value="house">House</option>
-                <option value="species">Species</option>
+                ${cfg.filters.map(f => `<option value="${escapeHtml(f.key)}">${escapeHtml(f.label)}</option>`).join("")}
               </select>
 
-              <label class="filter-label" for="filter-value">Type</label>
+              <label class="filter-label" for="filter-value">Value</label>
               <select id="filter-value" disabled>
                 <option value="">All</option>
               </select>
 
               <button type="button" id="filter-clear">Clear</button>
             </div>
+          ` : ``)}
 
-          <div id="list-grid" class="poster-grid" aria-live="polite">
+          <div id="list-grid" class="posterlist-grid" aria-live="polite">
             <p>Loading…</p>
           </div>
           </header>
@@ -86,8 +87,10 @@ export async function renderListPage(appEl, { type }) {
   const filterValueEl = appEl.querySelector("#filter-value");
   const clearBtn = appEl.querySelector("#filter-clear");
 
-  let selectedKey = "";   // "house" | "species" | ""
-  let selectedVal = "";   // value from filter-value
+  // Filters
+
+  let selectedKey = "";
+  let selectedVal = "";
 
   function fillValueOptions(items, key) {
     const values = Array.from(
@@ -107,7 +110,6 @@ export async function renderListPage(appEl, { type }) {
 
   function applyFilters() {
     const q = searchEl.value.trim().toLowerCase();
-
     let list = currentList;
 
     if (selectedKey && selectedVal) {
@@ -124,37 +126,39 @@ export async function renderListPage(appEl, { type }) {
     if (!list.length) gridEl.innerHTML = `<p role="status">No matches found.</p>`;
   }
 
-  // events
-  filterByEl.addEventListener("change", () => {
-    selectedKey = filterByEl.value; // "" | "house" | "species"
-    selectedVal = "";
+  // koppla events endast om filtret finns på sidan
+  if (filterByEl && filterValueEl && clearBtn) {
+    filterByEl.addEventListener("change", () => {
+      selectedKey = filterByEl.value;
+      selectedVal = "";
 
-    if (!selectedKey) {
+      if (!selectedKey) {
+        filterValueEl.innerHTML = `<option value="">All</option>`;
+        filterValueEl.disabled = true;
+        applyFilters();
+        return;
+      }
+
+      fillValueOptions(currentList, selectedKey);
+      applyFilters();
+    });
+
+    filterValueEl.addEventListener("change", () => {
+      selectedVal = filterValueEl.value;
+      applyFilters();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      searchEl.value = "";
+      filterByEl.value = "";
       filterValueEl.innerHTML = `<option value="">All</option>`;
       filterValueEl.disabled = true;
+      selectedKey = "";
+      selectedVal = "";
       applyFilters();
-      return;
-    }
-
-    fillValueOptions(currentList, selectedKey);
-    applyFilters();
-  });
-
-  filterValueEl.addEventListener("change", () => {
-    selectedVal = filterValueEl.value;
-    applyFilters();
-  });
-
-  clearBtn.addEventListener("click", () => {
-    searchEl.value = "";
-    filterByEl.value = "";
-    filterValueEl.innerHTML = `<option value="">All</option>`;
-    filterValueEl.disabled = true;
-    selectedKey = "";
-    selectedVal = "";
-    applyFilters();
-    searchEl.focus();
-  });
+      searchEl.focus();
+    });
+  }
 
   searchEl.addEventListener("input", applyFilters);
 
@@ -232,57 +236,69 @@ const LIST_CONFIG = {
   characters: {
     title: "Characters",
     fetcher: () => fetchWithHandling(`${HP_API}/characters`),
-    normalize: (data) =>
-  (data || []).map((c) => ({
-    id: c.id || c.name,
-    name: c.name || "Unknown",
-    subtitle: c.house || "Unknown",
-    house: c.house || "",
-    species: c.species || "",
-    img: c.image || "",
-  })),
+    normalize: (data) => (data || []).map((c) => ({
+      id: c.id || c.name,
+      name: c.name || "Unknown",
+      subtitle: c.house || "Unknown",
+      house: c.house || "",
+      species: c.species || "",
+      gender: c.gender || "",
+      ancestry: c.ancestry || "",
+      img: c.image || "",
+    })),
+    filters: [
+      { key: "house", label: "House" },
+      { key: "species", label: "Species" },
+      { key: "gender", label: "Gender" },
+      { key: "ancestry", label: "Ancestry" },
+    ],
+  },
+
+  books: {
+    title: "Books",
+    fetcher: async () => (await fetchWithHandling(`${POTTER_DB}/books`)).data || [],
+    normalize: (data) => (data || []).map((b) => ({
+      id: b.id,
+      name: b.attributes?.title || "Unknown",
+      subtitle: b.attributes?.author || "",
+      author: b.attributes?.author || "",
+      release_year: (b.attributes?.release_date || "").slice(0, 4),
+      img: b.attributes?.cover || "",
+    })),
+    filters: [
+      { key: "author", label: "Author" },
+      { key: "release_year", label: "Year" },
+    ],
+  },
+
+  movies: {
+    title: "Movies",
+    fetcher: async () => (await fetchWithHandling(`${POTTER_DB}/movies`)).data || [],
+    normalize: (data) => (data || []).map((m) => ({
+      id: m.id,
+      name: m.attributes?.title || "Unknown",
+      subtitle: m.attributes?.release_date || "",
+      release_year: (m.attributes?.release_date || "").slice(0, 4),
+      img: m.attributes?.poster || "",
+    })),
+    filters: [
+      { key: "release_year", label: "Year" },
+    ],
   },
 
   spells: {
     title: "Spells",
     fetcher: () => fetchWithHandling(`${HP_API}/spells`),
-    normalize: (data) =>
-      (data || []).map((s) => ({
-        id: s.id || s.name,
-        name: s.name || "Unknown",
-        subtitle: s.description ? "Has description" : "",
-        img: "", // placeholder
-      })),
-  },
-
-  books: {
-    title: "Books",
-    fetcher: async () => {
-      const json = await fetchWithHandling(`${POTTER_DB}/books`);
-      return json.data || [];
-    },
-    normalize: (data) =>
-      (data || []).map((b) => ({
-        id: b.id,
-        name: b.attributes?.title || "Unknown",
-        subtitle: b.attributes?.author || "",
-        img: b.attributes?.cover || "",
-      })),
-  },
-
-  movies: {
-    title: "Movies",
-    fetcher: async () => {
-      const json = await fetchWithHandling(`${POTTER_DB}/movies`);
-      return json.data || [];
-    },
-    normalize: (data) =>
-      (data || []).map((m) => ({
-        id: m.id,
-        name: m.attributes?.title || "Unknown",
-        subtitle: m.attributes?.release_date || "",
-        img: m.attributes?.poster || "",
-      })),
+    normalize: (data) => (data || []).map((s) => ({
+      id: s.id || s.name,
+      name: s.name || "Unknown",
+      subtitle: s.description ? "Has description" : "No description",
+      hasDescription: s.description ? "Yes" : "No",
+      img: "",
+    })),
+    filters: [
+      { key: "hasDescription", label: "Has description" },
+    ],
   },
 
   houses: {
@@ -293,13 +309,13 @@ const LIST_CONFIG = {
       { id: "ravenclaw", name: "Ravenclaw" },
       { id: "hufflepuff", name: "Hufflepuff" },
     ]),
-    normalize: (data) =>
-      (data || []).map((h) => ({
-        id: h.id,
-        name: h.name,
-        subtitle: "Hogwarts House",
-        img: HOUSE_IMAGES?.[h.id] || "",
-      })),
+    normalize: (data) => (data || []).map((h) => ({
+      id: h.id,
+      name: h.name,
+      subtitle: "Hogwarts House",
+      img: HOUSE_IMAGES?.[h.id] || "",
+    })),
+    filters: [], 
   },
 };
 
