@@ -763,3 +763,11 @@ body {
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,.2);
 }
+
+/* FILTER DROPDOWNS */
+.filters select:focus-visible,
+.filters button:focus-visible,
+#list-search:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: 2px;
+}
