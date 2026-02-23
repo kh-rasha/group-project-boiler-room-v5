@@ -591,10 +591,13 @@ body {
   border-bottom: 1px solid var(--hp-gold-soft);
   position: relative;
   z-index: 9999;
+  height: 32px;
+  line-height: 32px;
 }
 
 #offline-banner[hidden] {
-  display: none;
+  display: block;
+  visibility: hidden;
 }
 
 /* Detail section */
@@ -770,4 +773,11 @@ body {
 #list-search:focus-visible {
   outline: 3px solid #000;
   outline-offset: 2px;
+}
+/* Keep SPA area stable to avoid layout jump */
+#main, #app {
+  min-height: 100vh;
+}
+html {
+  overflow-y: scroll;
 }
