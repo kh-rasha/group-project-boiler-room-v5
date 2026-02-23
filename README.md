@@ -96,19 +96,38 @@ The following manual tests were performed:
 The application now supports keyboard-only navigation, follows semantic HTML structure, meets WCAG 2.1 AA contrast requirements, and passes automated accessibility testing using axe DevTools.
 
 
-## Performance (Snabb laddning)
+## Performance & Loading Speed (Snabb laddning)
 
-### What was improved
-- Reduced Cumulative Layout Shift (CLS) by reserving space for main app content (`#main` / `#app`)
-- Reserved space for the offline banner to prevent layout jumps
-- Improved layout stability across Home and Characters pages
+Performance was tested using Google Chrome DevTools (Lighthouse and Performance tab).
 
-### Performance measurements
-Measured using Chrome DevTools (Performance / Lighthouse).
+### Lighthouse Results (Local Test)
 
-Results (local):
-- Home: LCP 0.24s, CLS 0.01
-- Characters: LCP 0.58s, CLS 0.21
+Home page:
+- Performance: 82
+- Accessibility: 100
+- Best Practices: 100
+- SEO: 83
+- Largest Contentful Paint (LCP): 4.2 s
+- Cumulative Layout Shift (CLS): 0.01
 
-### Cache (Service Worker)
-Verified that the PWA service worker is active in Chrome DevTools → Application → Service Workers.
+Characters page:
+- LCP: 0.58 s
+- CLS: 0.21
+
+### Improvements Made
+
+- Reduced Cumulative Layout Shift (CLS) by reserving layout space for:
+    - `#main`
+    - `#app`
+    - offline banner
+- Ensured stable image containers to prevent layout jumps
+- Enabled Service Worker caching for static assets
+- Verified PWA functionality in production build
+
+### Service Worker
+
+Service Worker is activated and running.
+Static resources are cached for improved performance and offline support.
+
+Verified in:
+Chrome DevTools → Application → Service Workers
