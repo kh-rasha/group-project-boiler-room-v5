@@ -214,7 +214,7 @@ export async function renderListPage(appEl, { type }) {
         return;
       }
 
-      gridEl.innerHTML = `<p role="alert">You are offline and no favorites are saved.</p>`;
+      gridEl.innerHTML = `<p role="alert">No saved data yet - go online first .</p>`;
       return;
     }
 
@@ -368,35 +368,44 @@ function renderList(items, listEl, type) {
 /* ---------------- Fetch + offline handling ---------------- */
 
 async function fetchWithHandling(url, { timeoutMs = 8000 } = {}) {
-  if (!navigator.onLine) {
-    const err = new Error("offline");
-    err.type = "offline";
-    throw err;
-  }
-
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const res = await fetch(url, { signal: controller.signal });
+
+    // API-fel (online men server svarar fel)
     if (!res.ok) {
-      const err = new Error(`API responded with ${res.status}`);
+      const err = new Error(`api`);
       err.type = "api";
       err.status = res.status;
       throw err;
     }
-    return await res.json();
+
+    const data = await res.json();
+
+    // VIKTIGT: detta är vår "ingen cache finns offline"-signal från SW
+    if (data?.error === "offline") {
+      const err = new Error("offline");
+      err.type = "offline";
+      throw err;
+    }
+
+    return data;
   } catch (e) {
     if (e.name === "AbortError") {
       const err = new Error("timeout");
       err.type = "timeout";
       throw err;
     }
+
+    // Om nätet är borta / fetch failar → offline
     if (!navigator.onLine) {
       const err = new Error("offline");
       err.type = "offline";
       throw err;
     }
+
     const err = new Error("network");
     err.type = "network";
     throw err;

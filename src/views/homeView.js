@@ -11,6 +11,18 @@ function getFriendlyMessage(type) {
   return "We couldn’t load the data right now. Please try again in a moment.";
 }
 
+async function fetchJsonWithOffline(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("api");
+
+  const data = await res.json();
+  if (data?.error === "offline") {
+    const err = new Error("offline");
+    err.type = "offline";
+    throw err;
+  }
+  return data;
+}
 
 export async function renderHome(appEl) {
   const heroHtml = `
@@ -54,55 +66,30 @@ export async function renderHome(appEl) {
 
 
   try {
-  const [
-  charactersRes,
-  spellsRes,
-  booksRes,
-  moviesRes,
-  gryffRes,
-  slythRes,
-  ravenRes,
-  huffRes
+const [
+  characters,
+  spells,
+  booksJson,
+  moviesJson,
+  gryff,
+  slyth,
+  raven,
+  huff
 ] = await Promise.all([
-  fetch(`${HP_API}/characters`),
-  fetch(`${HP_API}/spells`),
-  fetch(`${POTTER_DB}/books`),
-  fetch(`${POTTER_DB}/movies`),
-  fetch(`${HP_API}/characters/house/gryffindor`),
-  fetch(`${HP_API}/characters/house/slytherin`),
-  fetch(`${HP_API}/characters/house/ravenclaw`),
-  fetch(`${HP_API}/characters/house/hufflepuff`),
+  fetchJsonWithOffline(`${HP_API}/characters`),
+  fetchJsonWithOffline(`${HP_API}/spells`),
+  fetchJsonWithOffline(`${POTTER_DB}/books`),
+  fetchJsonWithOffline(`${POTTER_DB}/movies`),
+  fetchJsonWithOffline(`${HP_API}/characters/house/gryffindor`),
+  fetchJsonWithOffline(`${HP_API}/characters/house/slytherin`),
+  fetchJsonWithOffline(`${HP_API}/characters/house/ravenclaw`),
+  fetchJsonWithOffline(`${HP_API}/characters/house/hufflepuff`),
 ]);
 
-    if (!charactersRes.ok) throw new Error("Failed characters");
-    if (!spellsRes.ok) throw new Error("Failed spells");
-    if (!booksRes.ok) throw new Error("Failed books");
-    if (!moviesRes.ok) throw new Error("Failed movies");
-    if (!gryffRes.ok) throw new Error("Failed house gryffindor");
-    if (!slythRes.ok) throw new Error("Failed house slytherin");
-    if (!ravenRes.ok) throw new Error("Failed house ravenclaw");
-    if (!huffRes.ok) throw new Error("Failed house hufflepuff");
-
-    const characters = await charactersRes.json();
-    if (characters?.error === "offline") throw new Error("offline");
-    
-    const spells = await spellsRes.json();
-    if (spells?.error === "offline") throw new Error("offline");
-
-    const booksJson = await booksRes.json();
-if (booksJson?.error === "offline") throw new Error("offline");
 const books = booksJson.data;
-
-    const moviesJson = await moviesRes.json();
-if (moviesJson?.error === "offline") throw new Error("offline");
 const movies = moviesJson.data;
 
-    const [gryff, slyth, raven, huff] = await Promise.all([
-      gryffRes.json(),
-       slythRes.json(),
-       ravenRes.json(),
-       huffRes.json(),
-      ]);
+
     if (![gryff, slyth, raven, huff].every(Array.isArray)) {
   throw new Error("offline");
 }
