@@ -1,6 +1,7 @@
 import { renderHome } from "./views/homeView.js";
 import { renderDetail } from "./views/detailView.js";
 import { renderFavorites } from "./views/favoritesView.js";
+import { renderAbout } from "./views/aboutView.js";
 
 import { renderCharacters } from "./views/listViews/charactersView.js";
 import { renderBooks } from "./views/listViews/booksView.js";
@@ -18,6 +19,7 @@ export function renderRoute() {
   if (hash.startsWith("#/home")) return renderHome(app);
   if (hash.startsWith("#/detail")) return renderDetail(app);
   if (hash.startsWith("#/favorites")) return renderFavorites(app);
+  if (hash.startsWith("#/about")) return renderAbout(app);
   if (hash.startsWith("#/characters")) return renderCharacters(app);
   if (hash.startsWith("#/books")) return renderBooks(app);
   if (hash.startsWith("#/movies")) return renderMovies(app);

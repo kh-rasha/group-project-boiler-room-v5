@@ -183,6 +183,7 @@ const movies = moviesJson.data;
             <a class="browse-btn" href="#/movies">Movies</a>
             <a class="browse-btn" href="#/spells">Spells</a>
             <a class="browse-btn" href="#/houses">Houses</a>
+            <a class="browse-btn" href="#/about">About</a>
           </nav>
         </div>
       </section>
