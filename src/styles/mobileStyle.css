@@ -103,6 +103,18 @@
   .filters { 
     grid-template-columns: 1fr; 
   }
+
+  .poster-title {
+    font-size: 0.62rem;      
+    letter-spacing: 0.14em;  
+    line-height: 1.15;
+  }
+
+  .poster-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
   /* Keep SPA area stable to avoid layout jump */
   #main, #app {
     min-height: 100vh;

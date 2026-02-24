@@ -188,10 +188,8 @@ body {
 .poster-card {
   text-decoration: none;
   color: #000;
-  display: grid;
   gap: 0.6rem;
   justify-items: center;
-
 }
 
 .poster-frame {
@@ -216,11 +214,14 @@ body {
 }
 
 .poster-title {
-  margin: 0;
+  margin: 10px;
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
   color: #1e3a8a;
+  max-width: 100%;
+  line-height: 1.1;
+  min-height: 2.2em; 
 }
 
 .poster-card:hover .poster-img {
