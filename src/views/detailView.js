@@ -8,7 +8,7 @@ export async function renderDetail(appEl) {
   const { type, id } = getParams();
 
   if (!type || !id) {
-    appEl.innerHTML = `<p>Missing parameters</p>`;
+    appEl.innerHTML = `<p role="alert">Missing parameters</p>`;
     return;
   }
 
@@ -20,41 +20,34 @@ export async function renderDetail(appEl) {
 
     appEl.innerHTML = layout(renderDetailCard(data, type, id));
 
-    // Fokus på "stäng" (Back) när detalj öppnas
     const back = appEl.querySelector("[data-back]");
     back?.focus();
 
-    // Går tillbaka till senaste öppnade sidan
     back?.addEventListener("click", (e) => {
       e.preventDefault();
-
-      if (history.length > 1) {
-        history.back();
-      } else {
-        location.hash = "#/home";
-      }
+      if (history.length > 1) history.back();
+      else location.hash = "#/home";
     });
 
-    // ESC = stäng (gå tillbaka)
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        history.back(); 
-      }
-    };
-    window.addEventListener("keydown", onKeyDown, { once: true });
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          history.back();
+        }
+      },
+      { once: true }
+    );
 
     setupFavoritesUI(appEl);
     syncFavoritesUI(appEl);
-
   } catch (err) {
     console.error(err);
     appEl.innerHTML = layout(`
-      <h1>Failed to load</h1>
+      <p role="alert">Failed to load.</p>
       <a href="#/home" class="section-link" data-back>← Back</a>
     `);
-
-    // fokus även vid error
     appEl.querySelector("[data-back]")?.focus();
   }
 }
@@ -64,35 +57,30 @@ async function getDetailData(type, id) {
 
   if (type === "characters") {
     const list = await fetchJson(`${HP_API}/characters`);
-    const item = list.find(c =>
-      String(c.id || "") === wanted ||
-      String(c.name || "") === wanted
+    const item = list.find(
+      (c) => String(c.id || "") === wanted || String(c.name || "") === wanted
     );
-
     if (!item) return null;
 
     return {
       title: item.name,
-      //subtitle: [item.house, item.species].filter(Boolean).join(" • "),
       img: item.image,
       subtitle: item.actor ? `Played by actor: ${item.actor}` : "",
       fields: [
         ["House:", item.house],
         ["Species:", item.species],
         ["Gender:", item.gender],
-        ["Ancestry:", item.ancestry], 
+        ["Ancestry:", item.ancestry],
         ["Patronus:", item.patronus],
-      ]
+      ],
     };
   }
 
   if (type === "spells") {
     const list = await fetchJson(`${HP_API}/spells`);
-    const item = list.find(s =>
-      String(s.id || "") === wanted ||
-      String(s.name || "") === wanted
+    const item = list.find(
+      (s) => String(s.id || "") === wanted || String(s.name || "") === wanted
     );
-
     if (!item) return null;
 
     return {
@@ -100,7 +88,7 @@ async function getDetailData(type, id) {
       subtitle: "Spell description:",
       img: null,
       description: item.description,
-      fields: []
+      fields: [],
     };
   }
 
@@ -116,7 +104,7 @@ async function getDetailData(type, id) {
       fields: [
         ["Author:", b.attributes.author],
         ["Release date:", b.attributes.release_date],
-      ]
+      ],
     };
   }
 
@@ -132,7 +120,7 @@ async function getDetailData(type, id) {
       fields: [
         ["Release date:", m.attributes.release_date],
         ["Runtime:", m.attributes.runtime],
-      ]
+      ],
     };
   }
 
@@ -144,50 +132,50 @@ async function getDetailData(type, id) {
       title: capitalize(houseKey),
       subtitle: "Hogwarts House",
       img: HOUSE_IMAGES?.[houseKey] || null,
-      //description: `Members: ${members.length}`,
       fields: [
         ["Members:", String(members.length)],
-        ["Examples:", members.slice(0, 8).map(m => m.name).join(", ")]
-      ]
+        ["Examples:", members.slice(0, 8).map((m) => m.name).join(", ")],
+      ],
     };
   }
 
   return null;
 }
+
 function renderDetailCard(data, type, id) {
   return `
     <section class="content-card detail">
+      <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
+        <div class="detail-banner__inner">
+          <div class="detail-banner__actions">
+            <a href="javascript:void(0)" class="back-link" data-back>← Back</a>
 
-    <div class="detail-banner" style="--banner-url: url('${data.img || ""}')">
-  <div class="detail-banner__inner">
+            <button
+              type="button"
+              class="fav-btn fav-btn--detail"
+              data-fav-btn
+              data-id="${escapeHtml(id)}"
+              data-name="${escapeHtml(data.title)}"
+              data-type="${escapeHtml(type)}"
+              aria-pressed="false"
+              aria-label="Toggle favorite"
+            >☆</button>
+          </div>
 
-    <div class="detail-banner__actions">
-      <a href="javascript:void(0)" class="back-link" data-back>← Back</a>
+          ${
+            data.img
+              ? `<img class="detail-banner__poster" src="${data.img}" alt="${escapeHtml(
+                  data.title
+                )}" loading="lazy">`
+              : `<div class="detail-banner__poster detail-banner__poster--ph"></div>`
+          }
+        </div>
+      </div>
 
-      <button
-        type="button"
-        class="fav-btn fav-btn--detail"
-        data-fav-btn
-        data-id="${escapeHtml(id)}"
-        data-name="${escapeHtml(data.title)}"
-        data-type="${escapeHtml(type)}"
-        aria-pressed="false"
-      >☆</button>
-    </div>
-
-    ${
-      data.img
-        ? `<img class="detail-banner__poster" src="${data.img}" alt="${escapeHtml(data.title)}" loading="lazy">`
-        : `<div class="detail-banner__poster detail-banner__poster--ph"></div>`
-    }
-
-  </div>
-</div>
-
-<div class="detail-meta">
-  <h1>${escapeHtml(data.title)}</h1>
-  ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
-</div>
+      <div class="detail-meta">
+        <h1>${escapeHtml(data.title)}</h1>
+        ${data.subtitle ? `<p class="detail-subtitle">${escapeHtml(data.subtitle)}</p>` : ""}
+      </div>
 
       ${data.description ? `<p class="detail-desc">${escapeHtml(data.description)}</p>` : ""}
 
@@ -196,16 +184,18 @@ function renderDetailCard(data, type, id) {
           ? `<dl class="detail-dl">
               ${data.fields
                 .filter(([_, value]) => value)
-                .map(([label, value]) => `
-                  <div class="detail-row">
-                    <dt>${escapeHtml(label)}</dt>
-                    <dd>${escapeHtml(value)}</dd>
-                  </div>
-                `).join("")}
+                .map(
+                  ([label, value]) => `
+                    <div class="detail-row">
+                      <dt>${escapeHtml(label)}</dt>
+                      <dd>${escapeHtml(value)}</dd>
+                    </div>
+                  `
+                )
+                .join("")}
             </dl>`
           : ""
       }
-
     </section>
   `;
 }
@@ -247,5 +237,6 @@ function escapeHtml(s) {
   return String(s)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
