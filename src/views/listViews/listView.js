@@ -1,5 +1,6 @@
 import { setupFavoritesUI, syncFavoritesUI } from "../../features/favorites/favoritesUI.js";
 import { HOUSE_IMAGES } from "../../utils/houseImages.js";
+import { SPELL_IMAGES } from "../../utils/spellImages.js";
 
 const HP_API = "https://hp-api.onrender.com/api";
 const POTTER_DB = "https://api.potterdb.com/v1";
@@ -294,7 +295,7 @@ const LIST_CONFIG = {
       name: s.name || "Unknown",
       subtitle: s.description ? "Has description" : "No description",
       hasDescription: s.description ? "Yes" : "No",
-      img: "",
+      img: SPELL_IMAGES?.spellImage || "",
     })),
     filters: [
       { key: "hasDescription", label: "Has description" },
