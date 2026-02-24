@@ -103,6 +103,13 @@
   .filters { 
     grid-template-columns: 1fr; 
   }
+  /* Keep SPA area stable to avoid layout jump */
+  #main, #app {
+    min-height: 100vh;
+  }
+  html {
+    overflow-y: scroll;
+  }
 }
 
 

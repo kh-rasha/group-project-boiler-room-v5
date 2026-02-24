@@ -61,7 +61,7 @@ function updateOnlineStatus() {
     banner.hidden = true;
   }
 }
-
+navigator.serviceWorker.register('/service-worker.js')
 
 
 function boot() {
