@@ -158,6 +158,7 @@ function renderDetailCard(data, type, id) {
               data-id="${escapeHtml(id)}"
               data-name="${escapeHtml(data.title)}"
               data-type="${escapeHtml(type)}"
+              data-img="${escapeHtml(data.img || "")}"
               aria-pressed="false"
               aria-label="Toggle favorite"
             >☆</button>

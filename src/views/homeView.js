@@ -273,6 +273,8 @@ function renderPosterSection({ title, route, items }) {
               data-id="${escapeHtml(item.id)}"
               data-name="${escapeHtml(item.name)}"
               data-type="${escapeHtml(route)}"
+              data-img="${escapeHtml(item.img || "")}"
+              data-subtitle="${escapeHtml(item.subtitle || "")}"
               aria-pressed="false"
               aria-label="Add to favorites"
             >☆</button>

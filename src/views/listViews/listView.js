@@ -351,15 +351,16 @@ function renderList(items, listEl, type) {
         ${item.subtitle ? `<p class="poster-subtitle">${escapeHtml(item.subtitle)}</p>` : ""}
 
         <button
-          type="button"
-          class="fav-btn"
-          data-fav-btn
-          data-id="${escapeHtml(item.id)}"
-          data-name="${escapeHtml(item.name)}"
-          data-type="${escapeHtml(type)}"
-          aria-pressed="false"
-          aria-label="Toggle favorite"
-        >☆</button>
+            type="button"
+            class="fav-btn"
+            data-fav-btn
+            data-id="${escapeHtml(item.id)}"
+            data-name="${escapeHtml(item.name)}"
+            data-type="${escapeHtml(type)}"
+            data-img="${escapeHtml(item.img || "")}"
+            aria-pressed="false"
+            aria-label="Toggle favorite"
+          >☆</button>
       </a>
     `
     )

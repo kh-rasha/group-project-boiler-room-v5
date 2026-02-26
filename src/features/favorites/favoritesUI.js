@@ -10,22 +10,43 @@ export function setupFavoritesUI(containerEl) {
     if (!containerEl) return;
 
     containerEl.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-fav-btn]");
-        if (!btn) return;
+  const btn = e.target.closest("[data-fav-btn]");
+  if (!btn) return;
 
-        // IMPORTANT: prevent the click from triggering the card link
-        e.preventDefault();
-        e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 
-        const id = btn.dataset.id;
-        const name = btn.dataset.name;
-        const type = btn.dataset.type;
+  const id = btn.dataset.id;
+  const name = btn.dataset.name;
+  const type = btn.dataset.type;
+  const img = btn.dataset.img;
+  const subtitle = btn.dataset.subtitle;
 
-        if (!id) return;
+  if (!id) return;
 
-        toggleFavorite({ id, name, type });
-        updateFavButton(btn, isFavorite(id));
-    });
+  const wasFavorite = isFavorite(id, type);
+
+  toggleFavorite({ id, name, type, img, subtitle });
+
+  const isNowFavorite = isFavorite(id, type);
+  updateFavButton(btn, isNowFavorite);
+
+  if (wasFavorite && !isNowFavorite) {
+  const card = btn.closest(".poster-card");
+  if (card) {
+    card.classList.add("poster-card--removing");
+
+    setTimeout(() => {
+      card.remove();
+
+      // Om inga kvar → visa tom state
+      if (!containerEl.querySelector(".poster-card")) {
+        containerEl.innerHTML = `<p role="status">No favorites saved yet.</p>`;
+      }
+    }, 200);
+  }
+}
+});
 }
 
 
@@ -34,11 +55,14 @@ export function setupFavoritesUI(containerEl) {
  * Should be called after rendering character cards.
  */
 export function syncFavoritesUI(containerEl) {
-    if (!containerEl) return;
+  if (!containerEl) return;
 
-    containerEl.querySelectorAll("[data-fav-btn]").forEach((btn) => {
-        updateFavButton(btn, isFavorite(btn.dataset.id));
-    });
+  containerEl.querySelectorAll("[data-fav-btn]").forEach((btn) => {
+    updateFavButton(
+      btn,
+      isFavorite(btn.dataset.id, btn.dataset.type)
+    );
+  });
 }
 
 /**

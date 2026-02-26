@@ -814,3 +814,20 @@ body {
 #app {
   width: 100%;
 }
+
+/* Animationer */
+
+.poster-card--removing {
+  animation: favRemove 220ms ease forwards;
+}
+
+@keyframes favRemove {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
