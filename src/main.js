@@ -4,7 +4,7 @@ import "./styles/mobileStyle.css";
 import { renderRoute } from "./router.js";
 
 function initMenu() {
-  const topNav = document.querySelector(".top-nav");
+  const topNav  = document.querySelector(".top-nav");
   const menuBtn = document.querySelector(".menu-btn");
   const navLinks = document.querySelector(".nav-links");
 
@@ -39,6 +39,7 @@ function initMenu() {
   });
 }
 
+/* ---------- Service Worker ---------- */
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", async () => {
     try {
@@ -50,28 +51,32 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   });
 }
 
-/* ---------- Global Offline Banner ---------- */
+/* ---------- Offline Banner ---------- */
 function updateOnlineStatus() {
   const banner = document.getElementById("offline-banner");
   if (!banner) return;
-
-  if (!navigator.onLine) {
-    banner.hidden = false;
-  } else {
-    banner.hidden = true;
-  }
+  banner.hidden = navigator.onLine;
 }
-navigator.serviceWorker.register('./service-worker.js')
 
-
+/* ---------- Routing – körs vid varje vy-byte ---------- */
 function boot() {
   renderRoute();
-  initMenu(); // ✅ re-bind menu if DOM changed
+
+  // Stäng menyn när man navigerar till ny vy
+  const topNav  = document.querySelector(".top-nav");
+  const menuBtn = document.querySelector(".menu-btn");
+  if (topNav && menuBtn) {
+    topNav.classList.remove("is-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.setAttribute("aria-label", "Öppna meny");
+  }
 }
 
-boot();
+/* ---------- Start ---------- */
+initMenu();   // ← en gång, här
+boot();       // ← renderar första vyn
 updateOnlineStatus();
 
-window.addEventListener("hashchange", boot);
-window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("hashchange", boot);   // boot (ej initMenu) vid navigation
+window.addEventListener("online",  updateOnlineStatus);
 window.addEventListener("offline", updateOnlineStatus);
