@@ -20,8 +20,10 @@ export function saveFavorites(favorites) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
 }
 
-export function isFavorite(id) {
-    return getFavorites().some((fav) => fav.id === id);
+export function isFavorite(id, type) {
+  return getFavorites().some(
+    (fav) => fav.id === id && fav.type === type
+  );
 }
 
 export function addFavorite(item) {
