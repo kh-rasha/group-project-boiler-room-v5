@@ -50,7 +50,7 @@ export function renderFavorites(appEl) {
   // Favorites UI (delegation + sync)
   const gridEl = appEl.querySelector("#fav-grid");
   if (gridEl) {
-    setupFavoritesUI(gridEl);
+    setupFavoritesUI(gridEl, { removeCardOnUnfavorite: true });
     syncFavoritesUI(gridEl);
   }
 

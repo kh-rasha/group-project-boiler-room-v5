@@ -6,48 +6,47 @@ import { isFavorite, toggleFavorite } from "../../storage/favoritesStorage.js";
  * (e.g. the characters list container).
  * Uses event delegation to handle all favorite buttons.
  */
-export function setupFavoritesUI(containerEl) {
-    if (!containerEl) return;
+export function setupFavoritesUI(containerEl, { removeCardOnUnfavorite = false } = {}) {
+  if (!containerEl) return;
 
-    containerEl.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-fav-btn]");
-  if (!btn) return;
+  containerEl.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-fav-btn]");
+    if (!btn) return;
 
-  e.preventDefault();
-  e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
-  const id = btn.dataset.id;
-  const name = btn.dataset.name;
-  const type = btn.dataset.type;
-  const img = btn.dataset.img;
-  const subtitle = btn.dataset.subtitle;
+    const id = btn.dataset.id;
+    const name = btn.dataset.name;
+    const type = btn.dataset.type;
+    const img = btn.dataset.img || "";
+    const subtitle = btn.dataset.subtitle || "";
+    if (!id) return;
 
-  if (!id) return;
+    const wasFavorite = isFavorite(id, type);
 
-  const wasFavorite = isFavorite(id, type);
+    toggleFavorite({ id, name, type, img, subtitle });
 
-  toggleFavorite({ id, name, type, img, subtitle });
+    const isNowFavorite = isFavorite(id, type);
+    updateFavButton(btn, isNowFavorite);
 
-  const isNowFavorite = isFavorite(id, type);
-  updateFavButton(btn, isNowFavorite);
+    // ✅ Bara i favorites-view: ta bort kortet direkt när man avfavoritar
+    if (removeCardOnUnfavorite && wasFavorite && !isNowFavorite) {
+      const card = btn.closest(".poster-card");
+      if (card) {
+        card.classList.add("poster-card--removing");
+        setTimeout(() => {
+          card.remove();
 
-  if (wasFavorite && !isNowFavorite) {
-  const card = btn.closest(".poster-card");
-  if (card) {
-    card.classList.add("poster-card--removing");
-
-    setTimeout(() => {
-      card.remove();
-
-      // Om inga kvar → visa tom state
-      if (!containerEl.querySelector(".poster-card")) {
-        containerEl.innerHTML = `<p role="status">No favorites saved yet.</p>`;
+          if (!containerEl.querySelector(".poster-card")) {
+            containerEl.innerHTML = `<p role="status">No favorites saved yet.</p>`;
+          }
+        }, 220);
       }
-    }, 200);
-  }
+    }
+  });
 }
-});
-}
+
 
 
 /**
