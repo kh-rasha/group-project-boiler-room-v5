@@ -4,8 +4,8 @@ import "./styles/mobileStyle.css";
 import { renderRoute } from "./router.js";
 
 function initMenu() {
-  const topNav  = document.querySelector(".top-nav");
-  const menuBtn = document.querySelector(".menu-btn");
+  const topNav = document.querySelector(".top-nav");
+  const menuBtn = document.querySelector("[aria-controls='primary-nav']");
   const navLinks = document.querySelector(".nav-links");
 
   if (!topNav || !menuBtn || !navLinks) return;
@@ -76,12 +76,37 @@ function updateOnlineStatus() {
   }
 }
 
+/* ---------- Dark/Light Mode ---------- */
+function initTheme() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+
+  const saved = localStorage.getItem("theme") || "light";
+  setTheme(saved);
+
+  btn.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    setTheme(current === "dark" ? "light" : "dark");
+  });
+}
+
+function setTheme(theme) {
+  const btn = document.getElementById("theme-toggle");
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+
+  if (btn) {
+    btn.textContent = theme === "dark" ? "☀️" : "🌙";
+    btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  }
+}
+
 /* ---------- Routing ---------- */
 function boot() {
   renderRoute();
 
-  const topNav  = document.querySelector(".top-nav");
-  const menuBtn = document.querySelector(".menu-btn");
+  const topNav = document.querySelector(".top-nav");
+  const menuBtn = document.querySelector("[aria-controls='primary-nav']");
   if (topNav && menuBtn) {
     topNav.classList.remove("is-open");
     menuBtn.setAttribute("aria-expanded", "false");
@@ -91,6 +116,7 @@ function boot() {
 
 /* ---------- Start ---------- */
 initMenu();
+initTheme();
 boot();
 
 window.addEventListener("hashchange", boot);
