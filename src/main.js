@@ -51,18 +51,35 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   });
 }
 
-/* ---------- Offline Banner ---------- */
+/* ---------- Global Offline Banner ---------- */
+let wasOffline = false;
+let onlineTimer = null;
+
 function updateOnlineStatus() {
   const banner = document.getElementById("offline-banner");
   if (!banner) return;
-  banner.hidden = navigator.onLine;
+
+  if (!navigator.onLine) {
+    clearTimeout(onlineTimer);
+    wasOffline = true;
+    banner.hidden = false;
+    banner.textContent = "⚠ You are offline. Some content may not be available.";
+  } else {
+    if (!wasOffline) return;
+    wasOffline = false;
+    banner.hidden = false;
+    banner.textContent = "✓ You are back online!";
+
+    onlineTimer = setTimeout(() => {
+      banner.hidden = true;
+    }, 3000);
+  }
 }
 
-/* ---------- Routing – körs vid varje vy-byte ---------- */
+/* ---------- Routing ---------- */
 function boot() {
   renderRoute();
 
-  // Stäng menyn när man navigerar till ny vy
   const topNav  = document.querySelector(".top-nav");
   const menuBtn = document.querySelector(".menu-btn");
   if (topNav && menuBtn) {
@@ -73,10 +90,15 @@ function boot() {
 }
 
 /* ---------- Start ---------- */
-initMenu();   // ← en gång, här
-boot();       // ← renderar första vyn
-updateOnlineStatus();
+initMenu();
+boot();
 
-window.addEventListener("hashchange", boot);   // boot (ej initMenu) vid navigation
-window.addEventListener("online",  updateOnlineStatus);
-window.addEventListener("offline", updateOnlineStatus);
+window.addEventListener("hashchange", boot);
+
+setTimeout(() => {
+  window.addEventListener("online", () => {
+    if (performance.now() < 2000) return;
+    updateOnlineStatus();
+  });
+  window.addEventListener("offline", updateOnlineStatus);
+}, 500);

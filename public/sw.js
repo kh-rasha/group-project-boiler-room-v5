@@ -1,4 +1,4 @@
-const CACHE_VERSION = "wizardpedia-v2"; // bumpa version när du ändrar
+const CACHE_VERSION = "wizardpedia-v4";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -7,7 +7,6 @@ const APP_SHELL = [
   "/icons/icon-512.png"
 ];
 
-// Cache-first for app shell
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL))
@@ -43,7 +42,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Bara cachea din egen origin (minskar strul med externa bilder)
+  const isImage = request.destination === "image";
+
+  if (isImage) {
+    event.respondWith(cacheFirst(request));
+    return;
+  }
+
   if (url.origin === self.location.origin) {
     event.respondWith(cacheFirst(request));
   }
@@ -54,8 +59,10 @@ async function cacheFirst(request) {
   if (cached) return cached;
 
   const res = await fetch(request);
-  const cache = await caches.open(CACHE_VERSION);
-  cache.put(request, res.clone());
+  if (res.ok) {
+    const cache = await caches.open(CACHE_VERSION);
+    cache.put(request, res.clone());
+  }
   return res;
 }
 
