@@ -930,3 +930,30 @@ body {
   }
 
 }
+
+/* 🪄 Magisk hover-effekt på kort */
+@keyframes magicGlow {
+  0%   { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
+  50%  { box-shadow: 0 0 20px var(--hp-gold), 0 0 40px var(--hp-gold-soft); }
+  100% { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
+}
+
+/* 🪄 Magisk hover-effekt på kort */
+@keyframes magicGlow {
+  0%   { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
+  50%  { box-shadow: 0 0 20px var(--hp-gold), 0 0 40px var(--hp-gold-soft); }
+  100% { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
+}
+
+/* 🪄 Magisk hover-effekt på kort */
+@keyframes magicGlow {
+  0%   { box-shadow: 0 0 10px var(--hp-gold), 0 0 20px var(--hp-gold); }
+  50%  { box-shadow: 0 0 40px var(--hp-gold), 0 0 80px var(--hp-gold), 0 0 120px var(--hp-gold-soft); }
+  100% { box-shadow: 0 0 10px var(--hp-gold), 0 0 20px var(--hp-gold); }
+}
+
+.poster-card:hover .poster-frame {
+  animation: magicGlow 1.5s ease-in-out infinite;
+  transform: translateY(-4px);
+  transition: transform 200ms ease;
+}
