@@ -30,11 +30,15 @@
 /* dark/light mode */
 
 .theme-btn {
-  order: -1;
+  font-size: 1rem;
+  padding: .15rem .35rem;
+  width: 32px;
+  height: 32px;
 }
+
 .logo {
-  flex: 1;
-  text-align: left;
+  flex: 0 0 auto;
+  margin-right: auto; 
 }
 
 [data-theme="dark"] {
@@ -48,17 +52,19 @@
 
 [data-theme="light"] {
   --bg: #f5f5f5;
-  --card-bg: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.92);
   --text: #000000;
   --text-muted: rgba(0,0,0,0.65);
   --border: rgba(0,0,0,0.1);
   --shadow: rgba(0,0,0,0.08);
 }
+
 [data-theme="dark"] .hero,
 [data-theme="dark"] .about,
 [data-theme="dark"] .browse,
 [data-theme="dark"] .content-card {
-  color: var(--hp-gold);
+  background: rgba(13, 17, 35, 0.82) !important;
+  border: 1px solid rgba(199, 162, 74, 0.3);
 }
 
 [data-theme="dark"] #about-text,
@@ -90,6 +96,11 @@
   color: var(--hp-parchment);
 }
 
+[data-theme="dark"] .section-link {
+  color: var(--hp-parchment);
+}
+
+
 /* Main section */
 
 html {
@@ -105,6 +116,13 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: var(--bg);
+
+  /* Bakgrundsbild */
+  background-image: url('/images/hogwarts-bg.jpg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-blend-mode: luminosity;
 }
 
 *,
@@ -123,6 +141,8 @@ body {
 .site-footer {
   background: transparent;
   padding: var(--gutter);
+  position: relative;
+  z-index: 100;
 }
 
 .site-header .container,
@@ -188,23 +208,21 @@ body {
 }
 
 .hero, .about, .browse, .content-card {
-  /* Harry Potter font and color */
+  position: relative;
+  z-index: 1;
   font-family: 'Cinzel', serif;
   font-weight: 500;
   font-size: 1rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #8a6f3d;
-  /*  */
-  border: none;
   padding: 1.75rem;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(199, 162, 74, 0.4);
   border-radius: 20px;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.08),
     0 1px 3px rgba(0, 0, 0, 0.05);
-    background: var(--card-bg);
-
 }
 
 /* Cards section */
@@ -372,9 +390,32 @@ body {
   text-align: center;
   text-decoration: none;
   color: var(--hp-parchment);
-  background: var(--hp-menu);
+  background: var(--hp-gradient);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  
+}
+
+.browse-btn {
+  box-shadow:
+    0 8px 26px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 0 28px var(--hp-blue-glow);
+}
+
+.browse-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 20% -10%,
+    rgba(120, 155, 255, 0.25),
+    transparent 60%
+  );
 }
 
 .browse-btn:focus {
@@ -397,16 +438,35 @@ body {
 }
 
 .logo {
+  text-decoration: none;  /* lägg till denna rad */
+  font-family: 'HarryP', cursive;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  background: linear-gradient(
+     180deg,
+    #c9963a 50%,    /* varmt guld toppen */
+    #8a6520 70%,   /* mörkare mitten */
+    #5c4010 100%   /* djup brun botten */
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 6px rgba(139, 101, 32, 0.5));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width:95%;
-  color: var(--hp-parchment);
+  max-width: 95%;
+  display: inline-block;
+  transform: scaleY(1.5);
+  transform-origin: left center;  /* håller den vänsterjusterad */
+  flex: 0 0 auto;  /* krävs för transform att fungera */
 }
 
 /* Nav section */
 
 .top-nav {
+   position: relative;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -933,20 +993,6 @@ body {
 
 /* 🪄 Magisk hover-effekt på kort */
 @keyframes magicGlow {
-  0%   { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
-  50%  { box-shadow: 0 0 20px var(--hp-gold), 0 0 40px var(--hp-gold-soft); }
-  100% { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
-}
-
-/* 🪄 Magisk hover-effekt på kort */
-@keyframes magicGlow {
-  0%   { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
-  50%  { box-shadow: 0 0 20px var(--hp-gold), 0 0 40px var(--hp-gold-soft); }
-  100% { box-shadow: 0 0 5px var(--hp-gold), 0 0 10px var(--hp-gold); }
-}
-
-/* 🪄 Magisk hover-effekt på kort */
-@keyframes magicGlow {
   0%   { box-shadow: 0 0 10px var(--hp-gold), 0 0 20px var(--hp-gold); }
   50%  { box-shadow: 0 0 40px var(--hp-gold), 0 0 80px var(--hp-gold), 0 0 120px var(--hp-gold-soft); }
   100% { box-shadow: 0 0 10px var(--hp-gold), 0 0 20px var(--hp-gold); }
@@ -956,4 +1002,94 @@ body {
   animation: magicGlow 1.5s ease-in-out infinite;
   transform: translateY(-4px);
   transition: transform 200ms ease;
+}
+
+.browse-btn:hover {
+  animation: magicGlow 1.5s ease-in-out infinite;
+  transform: translateY(-4px);
+  transition: transform 200ms ease;
+}
+
+.poster-card:active .poster-frame {
+  animation: magicGlow 1.5s ease-in-out infinite;
+  transform: translateY(-4px);
+}
+
+.browse-btn:active {
+  animation: magicGlow 1.5s ease-in-out infinite;
+  transform: translateY(-4px);
+}
+
+.poster-card,
+.poster-frame,
+.poster-link {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+@font-face {
+  font-family: 'HarryP';
+  src: url('/fonts/HarryP-MVZ6w.ttf') format('truetype');
+}
+
+
+/* Intron */
+#splash-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 1s ease;
+}
+
+/* Bakgrundsglöd via pseudo-element – GPU-vänligt */
+#splash-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 1s ease;
+  will-change: opacity;
+}
+
+.splash-logo {
+  font-family: 'HarryP', cursive;
+  font-size: 6rem;
+  background: linear-gradient(
+    180deg,
+    #fff5c0 0%,
+    #e8b84b 30%,
+    #c7a24a 60%,
+    #8a6520 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  will-change: filter;
+  animation: splashGlow 2s ease-in-out infinite;
+}
+
+@keyframes splashGlow {
+  0% {
+    filter: 
+      drop-shadow(0 0 6px rgba(199, 162, 74, 0.4))
+      drop-shadow(0 0 12px rgba(199, 162, 74, 0.2));
+  }
+  50% {
+    filter: 
+      drop-shadow(0 0 20px rgba(255, 220, 80, 1))
+      drop-shadow(0 0 50px rgba(255, 180, 40, 0.8))
+      drop-shadow(0 0 90px rgba(200, 120, 10, 0.5));
+  }
+  100% {
+    filter: 
+      drop-shadow(0 0 6px rgba(199, 162, 74, 0.4))
+      drop-shadow(0 0 12px rgba(199, 162, 74, 0.2));
+  }
 }

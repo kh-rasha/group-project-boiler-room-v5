@@ -119,6 +119,7 @@ initMenu();
 initTheme();
 boot();
 
+
 window.addEventListener("hashchange", boot);
 
 setTimeout(() => {
@@ -128,3 +129,41 @@ setTimeout(() => {
   });
   window.addEventListener("offline", updateOnlineStatus);
 }, 500);
+
+
+const splash = document.getElementById('splash-screen');
+
+if (sessionStorage.getItem('splashPlayed')) {
+  splash.style.display = 'none';
+  document.documentElement.style.visibility = '';
+} else {
+  // Dölj main-innehållet först
+  document.getElementById('main').style.opacity = '0';
+  document.querySelector('.site-header').style.opacity = '0';
+
+  setTimeout(() => {
+    splash.style.transition = 'opacity 1.2s ease-in-out';
+    splash.style.opacity = '0';
+
+    setTimeout(() => {
+      splash.remove();
+      sessionStorage.setItem('splashPlayed', 'true');
+
+      // Avslöja sidan med magisk effekt
+      document.getElementById('main').style.transition = 'opacity 1.5s ease-in, filter 1.5s ease-in';
+      document.getElementById('main').style.filter = 'blur(8px) brightness(2)';
+      document.querySelector('.site-header').style.transition = 'opacity 1.5s ease-in, filter 1.5s ease-in';
+      document.querySelector('.site-header').style.filter = 'blur(8px) brightness(2)';
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById('main').style.opacity = '1';
+          document.getElementById('main').style.filter = 'blur(0px) brightness(1)';
+          document.querySelector('.site-header').style.opacity = '1';
+          document.querySelector('.site-header').style.filter = 'blur(0px) brightness(1)';
+        });
+      });
+
+    }, 1200);
+  }, 2500);
+}
