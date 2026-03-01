@@ -3,6 +3,13 @@
   <head>
   <meta charset="UTF-8" />
 
+ <!-- Dölj body direkt om splash redan spelats -->
+  <script>
+    if (sessionStorage.getItem('splashPlayed')) {
+      document.documentElement.style.visibility = 'hidden';
+    }
+  </script>
+  
   <!-- PWA -->
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#6b21a8" />
@@ -12,39 +19,50 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wizardpedia - Harry Potter Wiki</title>
+
 </head>
 
 
   <body>
+     <div id="splash-screen">
+    <span class="splash-logo">Wizardpedia</span>
+  </div>
   <a class="skip-link" href="#main">Skip to main content</a>
   <div id="offline-banner" hidden role="status" aria-live="polite">
     ⚠ You are offline. Some content may not be available.
     </div>
     <header class="site-header">
   <div class="container">
-    <nav class="top-nav" aria-label="Huvudnavigation">
-      <div class="menu-overlay" hidden></div>
-      <a class="logo" href="#/home">Wizardpedia - Harry Potter Wiki</a>
+    
+   <nav class="top-nav" aria-label="Huvudnavigation">
+  <div class="menu-overlay" hidden></div>
+  <button 
+    id="theme-toggle"
+    class="menu-btn theme-btn"
+    aria-label="Switch to dark mode"
+    type="button"
+  >☀️</button>
+  <a class="logo" href="#/home">Wizardpedia</a>
 
+  <ul class="nav-links" id="primary-nav">
+    <li><a href="#/home">Home</a></li>
+    <li><a href="#/characters">Characters</a></li>
+    <li><a href="#/books">Books</a></li>
+    <li><a href="#/movies">Movies</a></li>
+    <li><a href="#/spells">Spells</a></li>
+    <li><a href="#/houses">Houses</a></li>
+    <li><a href="#/about">About us</a></li>
+    <li><a href="#/favorites">Favorites</a></li>
+  </ul>
 
-      <ul class="nav-links" id="primary-nav">
-        <li><a href="#/home">Home</a></li>
-        <li><a href="#/characters">Characters</a></li>
-        <li><a href="#/books">Books</a></li>
-        <li><a href="#/movies">Movies</a></li>
-        <li><a href="#/spells">Spells</a></li>
-        <li><a href="#/houses">Houses</a></li>
-        <li><a href="#/about">About us</a></li>
-        <li><a href="#/favorites">Favorites</a></li>
-
-      </ul>
-
-      <button class="menu-btn"
+  <button class="menu-btn"
     aria-label="Öppna meny"
   aria-controls="primary-nav"
   aria-expanded="false"
   type="button">☰</button>
-    </nav>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    
+</nav>
   </div>
 </header>
 
@@ -60,4 +78,5 @@
 
     <script type="module" src="/src/main.js"></script>
   </body>
+
 </html>
