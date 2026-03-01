@@ -1,4 +1,12 @@
 # group-project-boiler-room-v5
+# Wizardpedia – Harry Potter PWA
+
+Live version:
+https://kh-rasha.github.io/group-project-boiler-room-v5/
+
+CI/CD:
+Deployment is handled via GitHub Actions.
+The application is automatically built and deployed to GitHub Pages on every push to the main branch.
 # Accessibility & UX Improvements
 
 ## Overview
@@ -114,6 +122,22 @@ Characters page:
 - LCP: 0.58 s
 - CLS: 0.21
 
+## Known Limitations
+
+- New API data cannot be fetched while offline.
+- Only previously visited pages and loaded resources are cached.
+- If the API is unavailable and no cached version exists, data cannot be displayed.
+- Some dynamic updates require an internet connection.
+
+## Error Handling
+
+The application includes basic error handling:
+
+- Network errors display a user-friendly message.
+- If the API is unavailable, cached data is used when possible.
+- If no cached data exists, the user is informed that data cannot be loaded.
+- Offline status is indicated via a visible banner.
+
 ### Improvements Made
 
 - Reduced Cumulative Layout Shift (CLS) by reserving layout space for:
@@ -131,3 +155,37 @@ Static resources are cached for improved performance and offline support.
 
 Verified in:
 Chrome DevTools → Application → Service Workers
+
+## Installation & Offline Usage
+
+The application can be installed as a Progressive Web App (PWA).
+
+### Android (Chrome)
+1. Open the app in Chrome
+2. Tap the menu (⋮)
+3. Select "Add to Home Screen"
+4. The app can now be used offline after the first load
+
+### iOS (Safari)
+1. Open the app in Safari
+2. Tap the Share icon
+3. Select "Add to Home Screen"
+4. Launch from home screen to use in standalone mode
+
+Offline behavior:
+- The app shell (HTML, CSS, JS) is cached
+- Previously loaded API data is available offline
+- Favorites always work offline
+
+## Team Collaboration & Planning
+
+The project was developed by a team of three students.
+
+We divided responsibilities across:
+- API integration & routing
+- Favorites & local storage
+- PWA implementation (Service Worker & Manifest)
+- Accessibility & testing
+- CI/CD setup
+
+We followed an iterative development process and adjusted the plan when technical challenges required additional time.
